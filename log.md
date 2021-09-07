@@ -1,0 +1,27 @@
+# 2021.9.1
+
+`ising-chain-prototype\2021-9-1-old` is created using previous codes.
+
+By running `transverse_ising-1d-with-ani-ising.jl` two images about magnetization are created.
+
+`ising-chain-prototype\2021-9-1-old` is then rewritten into a more modularized version, stored in `ising-chain-prototype\2021-9-1-revised`.
+
+`ising-chain-prototype\2021-9-1-revised` is later used to created `ising-field-coupling-prototype\2021-9-1`.
+
+# 2021.9.7
+
+`ising-chain-prototype\2021-9-1-revised` is copied to `src\pure-z2`, as the prototype of the final version
+of pure $\mathbb{Z}_2$ gauge field simulation.
+
+`src\pure-z2\magnetization.PNG` and `src\pure-z2\magnetic-susceptibility.PNG` are created using `magnetic-ordering.jl`.
+Console output:
+
+> Progress: 100%|██████████████████████████████████████████████████████████████████████| Time: 0:20:04    
+
+`src\pure-z2\wilson-loop.jl` is created. A rough test indicates that it works well, since systems predicted to be
+deconfined obeys the perimeter law, while systems predicted to be confined obeys the area law.
+
+Further tests may be needed, to find out:
+- why the transition point seem to be $h = 1.2$ instead of $h = 1$
+- what is the best choice of $T$
+- how to simulate the finite temperature case

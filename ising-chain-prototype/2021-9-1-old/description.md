@@ -1,0 +1,1 @@
+`magnetization.PNG` and `magnetic-susceptibility.PNG` are obtained by running `transverse_ising-1d-with-ani-ising.jl`.

@@ -1,0 +1,303 @@
+\documentclass[hyperref, a4paper]{article}
+
+\usepackage{geometry}
+\usepackage{titling}
+\usepackage{titlesec}
+\usepackage{paralist}
+\usepackage{footnote}
+\usepackage{enumerate}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{mathtools}
+\usepackage{bbm}
+\usepackage{cite}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{physics}
+\usepackage{siunitx}
+\usepackage[version=4]{mhchem}
+\usepackage{tikz}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{autobreak}
+\usepackage[ruled, vlined, linesnumbered, noend]{algorithm2e}
+\usepackage[colorlinks, linkcolor=black, anchorcolor=black, citecolor=black, urlcolor=black]{hyperref}
+\usepackage{prettyref}
+
+% Page style
+\geometry{left=3.18cm,right=3.18cm,top=2.54cm,bottom=2.54cm}
+\titlespacing{\paragraph}{0pt}{1pt}{10pt}[20pt]
+\setlength{\droptitle}{-5em}
+\preauthor{\vspace{-10pt}\begin{center}}
+\postauthor{\par\end{center}}
+
+% Math operators
+\DeclareMathOperator{\timeorder}{T}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\legpoly}{P}
+\DeclareMathOperator{\primevalue}{P}
+\DeclareMathOperator{\sgn}{sgn}
+\newcommand*{\ii}{\mathrm{i}}
+\newcommand*{\ee}{\mathrm{e}}
+\newcommand*{\const}{\mathrm{const}}
+\newcommand*{\suchthat}{\quad \text{s.t.} \quad}
+\newcommand*{\argmin}{\arg\min}
+\newcommand*{\argmax}{\arg\max}
+\newcommand*{\normalorder}[1]{: #1 :}
+\newcommand*{\pair}[1]{\langle #1 \rangle}
+\newcommand*{\fd}[1]{\mathcal{D} #1}
+\DeclareMathOperator{\bigO}{\mathcal{O}}
+
+% TikZ setting
+\usetikzlibrary{arrows,shapes,positioning}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{decorations.markings}
+\tikzstyle arrowstyle=[scale=1]
+\tikzstyle directed=[postaction={decorate,decoration={markings,
+    mark=at position .5 with {\arrow[arrowstyle]{stealth}}}}]
+\tikzstyle ray=[directed, thick]
+\tikzstyle dot=[anchor=base,fill,circle,inner sep=1pt]
+
+% Algorithm setting
+% Python-style code
+\SetKwIF{If}{ElseIf}{Else}{if}{:}{elif:}{else:}{}
+\SetKwFor{For}{for}{:}{}
+\SetKwFor{While}{while}{:}{}
+\SetArgSty{textnormal}
+
+\newcommand*{\concept}[1]{{\textbf{#1}}}
+
+\lstset{basicstyle=\ttfamily,
+  showstringspaces=false,
+  commentstyle=\color{gray},
+  keywordstyle=\color{blue}
+}
+
+\title{$\mathbb{Z}_2$ gauge field coupled to a Fermion system}
+\author{Jinyuan Wu}
+
+\begin{document}
+
+\maketitle
+
+In the whole article we use $\sigma$ and $s$ as shorthands of $\sigma^z$ and $s^z$, unless confusion may be caused by the notation.
+
+\section{The model Hamiltonian}
+
+The model investigated in this article is proposed in \cite{moon2019deconfined}.
+The model Hamiltonian is 
+\begin{equation}
+    H = H_Z \underbrace{- J \sum_{\pair{\vb*{i}, \vb*{j}}} \sigma_{\vb*{i} \vb*{j}} s_{\vb*{i}} s_j + \sum_i h^x_i s^x_i}_{H_\text{ising}} - t \sum_{\pair{\vb*{i}, \vb*{j}}} \sigma_{\vb*{i} \vb*{j}} c^\dagger_{\vb*{i}} c_{\vb*{j}},
+    \label{eq:proposed-model}
+\end{equation}
+where
+\begin{equation}
+    H_Z = - g \sum_{\vb*{l} \in \Box_{\vb*{i}^*}} \sigma_{\vb*{i} \vb*{j}}^z - h \sum_{\pair{\vb*{i}, \vb*{j}}} \sigma^x_{\vb*{i} \vb*{j}}, 
+\end{equation}
+where $\vb*{i}^*$ is a site in the dual lattice (i.e. a site placed at the center of a plaquette), $\Box_{\vb*{i}^*}$ is the plaquette whose center is $\vb*{i}^*$, and $\vb*{l}$ denotes a certain bond of a plaquette.
+Such kind of model Hamiltonian usually emerges from orthogonal metals \cite{orthogonal_metal}.
+
+In this section, we introduce every part of \eqref{eq:proposed-model}.
+
+\subsection{$\mathbb{Z}_2$ gauge field and its dual theory}
+
+\subsubsection{The plaquette term}
+
+\begin{figure}
+    \centering
+    \input{lattice/gauge-plaquette.tex}
+    \caption{A $\mathbb{Z}_2$ gauge field configuration. The blue plaquette's $F_{\vb*{i}^*}$ is $(-1) \times 1 \times (-1) \times (-1) = -1$, while the red plaquette's $F_{\vb*{i}^*}$ is $1 \times 1 \times (-1) \times (-1) = 1$. Note that we assign the same index to a plaquette's center (labeled as $\vb*{i}^*$ at the right top of the diagram) and the plaquette's left bottom site $\vb*{i}$. The terms ``up'' and ``down'' are defined in the Cartesian coordinates given in the diagram.}
+    \label{fig:z2-gauge-field}
+\end{figure}
+
+The plaquette term in the Hamiltonian of the $\mathbb{Z}_2$ gauge field is be a function of
+\begin{equation}
+    F_{i^*} = \prod_{l \in \Box_{i^*}} \sigma_l,
+\end{equation}
+which is invariant under a $\mathbb{Z}_2$ gauge transformation
+\begin{equation}
+    Q_{\vb*{i}} = \prod_{\vb*{l} \in +_{\vb*{i}}} \sigma^x_{\vb*{l}}.
+\end{equation}
+A convenient convention is to let a plaquette share the same index with the site in its left bottom corner. 
+An example of a $\mathbb{Z}_2$ gauge field configuration can be found in \prettyref{fig:z2-gauge-field}.
+
+\subsubsection{The transverse field}
+
+We name the $\mathbb{Z}_2$ gauge theory with plaquette terms only as the \concept{Wegner model}, i.e.
+\begin{equation}
+    H_\text{W} = - g \sum_{\vb*{i}} F_{{\vb*{i}}^*}.
+\end{equation}
+There is no quantum fluctuation in $H_\text{W}$. The existence of interaction between the $\mathbb{Z}_2$ field and the Ising field and the fermions introduces effective interaction channels between $\mathbb{Z}_2$ excitations, but all effective interaction between $\mathbb{Z}_2$ excitations are in terms of $\sigma^z_{\vb*{i} \vb*{j}}$, which commutes with $H_Z$ and therefore do not bring in quantum fluctuation.
+
+An idiomic way to add quantum fluctuation is to add a transverse field.
+In this project we consider a transverse field Hamiltonian in the form of 
+\begin{equation}
+    H_h = - h \sum_{\pair{\vb*{i}, \vb*{j}}} \sigma_{\vb*{i} \vb*{j}}^x ,
+    \label{eq:transverse-field}
+\end{equation}
+where the parameter $h$ measures the quantum fluctuation.
+\eqref{eq:transverse-field} obviously commutes with $\vb*{Q}_{\vb*{i}}$ for every $\vb*{i}$, so it can be a term in a $\mathbb{Z}_2$ gauge invariant Hamiltonian. 
+In the language of string-net condensation, $H_h$ is a string tension term.
+
+\subsubsection{Equivalence between a $\mathbb{Z}_2$ gauge theory and a bundle of Ising chains}
+
+\begin{figure}
+    \centering
+    \input{lattice/gauge-sublattice.tex}
+    \caption{Dividing a gauge field configuration into two sublattices}
+\end{figure}
+
+With the gauge choice
+\begin{equation}
+    \sigma_{\vb*{i}, \vb*{i}+\vu*{x}} = 1,
+    \label{eq:gauge-choice}
+\end{equation}
+we have
+\begin{equation}
+    F_{i^*} = \sigma_{i, i+\hat{y}} \sigma_{i+\hat{x}, i + \hat{x} + \hat{y}},
+\end{equation}
+which, by renaming $\sigma_{i, i+\hat{y}}$ into $S_i$, reads 
+\begin{equation}
+    F_{i^*} = S_i S_{i+\hat{x}}.
+\end{equation}
+The hopping constant $\sigma_{\vb*{i} \vb*{j}}$, respectively, is
+\begin{equation}
+    \sigma_{\vb*{i} \vb*{j}} = \left\{
+    \begin{aligned}
+        1, &\quad j = i + \hat{x}, \\
+        S_i, &\quad j = i + \hat{y},
+    \end{aligned}
+\right., \quad \sigma_{\vb*{j} \vb*{i}} = \sigma_{\vb*{i} \vb*{j}}.
+\end{equation}
+
+This, actually, means that the $\mathbb{Z}_2$ gauge field may also be transformed into a dual transverse field Ising field.
+For example consider Wegner model.
+With the definition of $S_i$s it is rephrased into
+\begin{equation}
+    H_\text{W} = -g \sum_i S_i S_{i+\hat{x}},
+\end{equation}
+so the model is actually a bundle of 1D Ising spin chain.
+
+\begin{figure}
+    \centering
+    \input{lattice/gauge-to-spin-chain.tex}
+    \caption{Converting a $\mathbb{Z}_2$ gauge field theory into a bundle of Ising chains. There is no interaction between parallel Ising chains.}
+\end{figure}
+
+\subsubsection{Absence of a finite temperature deconfined phase}
+
+When $T=0$ and $h \ll g$, the $\mathbb{Z}_2$ gauge field exhibits a \emph{deconfined} phase, i.e. there are freely moving $\mathbb{Z}_2$ excitations such as $\mathbb{Z}_2$ fluxes.
+
+When $h = 0$, the absence of quantum fluctuation here means the model is indeed totally classical, so there is no thermal phase transition, because a 1D Ising chain does not show thermal phase transition.
+On the other hand, we know when $T=0$ the model exhibits deconfined $\mathbb{Z}_2$ charges, and when a transverse field is introduced a zero temperature quantum phase transition can be observed from the deconfined phase into the confined phase as the transverse field grows.
+If for $T > 0$ there exists a deconfined phase, a simple analysis of the phase diagram tells us there must be a thermal phase transition when there is no transverse field.
+The fact that Wegner model is dual to a bundle of 1D Ising chain and therefore lacks thermal phase transition implies that no deconfined phase exists with finite non zero temperature.
+
+\begin{figure}
+    \centering
+    \input{phase/no-deconfined.tex}
+    \caption{No deconfined phase when $T > 0$: if there is a deconfined phase when $T > 0$, there must be a thermal phase transition at the $h=0$ line, which is forbidden by the fact that a classical 1D Ising chain does not show thermal phase transitions.}
+\end{figure}
+
+Here the terminology may cause confusion: we do not actually know if the "finite temperature deconfined" phase shares behavior with the standard zero temperature deconfined phase in Wegner model, and the "confined" phase in the high temperature condition is not caused by a strong transverse field which coerces all $\sigma$ degrees of freedom into $\rightarrow$ or $\leftarrow$, but rather, by thermal fluctuation that erases all information of $\mathbb{Z}_2$ excitations.
+With the criteria of Wilson loops we know the "deconfined" phase obeys the perimeter law, agreeing with the ordinary deconfined phase in Wegner model, but whether the Wilson loop operator is a good detector in non-local models is still under question, because in local models, existence of long range correlation indicates exotic phenomena, while in non-local models long range correlation may be a trivial consequence of the non-locality.
+All these questions remain open, and in this project we simply use the terms "confined" and "deconfined" as a shorthand of the two phases in a $\mathbb{Z}_2$ gauge field theory with a dual theory of Dyson-Ising spin chains, without inquiring into their similarity and discrepancy with local $\mathbb{Z}_2$ theories such as Wegner model.
+
+\subsubsection{(Trivial) deconfined phase in models with long-range interaction}
+
+If we are to extend the deconfined phase to $T>0$, at least some stronger correlation must be introduced.
+Without introducing quantum fluctuation, a reasonable proposal may be 
+\[
+    H_Z = - \sum_i \sum_{r=1}^\infty J(r) \prod_{a=0}^{r-1} F_{i^*+a \hat{x}},
+\]
+or in terms of $S_i$s,
+\[
+    H_Z = - \sum_{r=1}^\infty J(r) \sum_i S_i S_{i + r \hat{x}} ,
+\]
+which is again a bundle of spin chains without quantum fluctuation but this time with long range interaction.
+A famous example is the \concept{Dyson-Ising chain}, which is defined as
+\[
+    H_Z = - g \sum_i S_i S_{i+\hat{x}} - J_r \sum_{i} \sum_r \frac{S_i S_{i + r \hat{x}}}{r^\omega}.
+\]
+For 1D Ising chain with long-range interaction, there exists a thermal phase transition with zero transverse field, and indeed we get a deconfined phase with finite temperature, and as the temperature goes up the deconfined phase switches to the confined phase.
+
+However, the so-called deconfined phase of a long-range interacting model is not of particular interest, because if you put manually something long-range into a model, \emph{of course} it exhibits some long-range behaviors, for example Wilson loops obeying the perimeter law.
+That is why we call such a ``deconfined phase'' a trivial one.
+A natural question to ask is, if we introduce more things into the model, what happens when $T > 0$?
+
+\subsection{Fermions}
+
+
+
+\section{Path integral formulation}
+
+We are going to study \eqref{eq:proposed-model} numerically.
+In the partition function, the (non-normalized) weight of a configuration is $\mel{n}{\ee^{-\beta H}}{n}$, given that $\{\ket{n}\}$ is a basis.
+We use a discrete path integral method to evaluate these weights.
+
+We introduce a Trotter decomposition with imaginary time step $\Delta \tau = \beta / m$, choose $\sigma_{\vb*{i} \vb*{j}}, s_{\vb*{i}}$ as labels for the $\mathbb{Z}_2$ field and the Ising field, respectively, and integrate out the fermion hopping term. 
+Now a configuration of the systems is a sequence of length $m$, and at each imaginary time point $\tau$ there is a $\mathbb{Z}_2$ field $\sigma_{\vb*{i} \vb*{j}}(\tau)$ and an Ising field $s_{\vb*{i} \vb*{j}}(\tau)$.
+The weight of a configuration is 
+\[
+    \begin{aligned}
+        W(\sigma, s) &= \trace_\text{fermion} \prod_{\tau = 1}^{m\Delta \tau} \mel{(\sigma, s)(\tau+\Delta \tau)}{\ee^{-\Delta \tau H_Z} \ee^{- \Delta \tau H_\text{ising}}}{(\sigma, s)(\tau)} \ee^{\Delta \tau t \sum_{\pair{\vb*{i}, \vb*{j}}} \sigma_{\vb*{i} \vb*{j}}(\tau) c_i^\dagger c_{\vb*{j}}} \\
+        &= \prod_{\tau = 1}^{m\Delta \tau} \mel{(\sigma, s)(\tau+\Delta \tau)}{\ee^{-\Delta \tau H_Z} \ee^{- \Delta \tau H_\text{ising}}}{(\sigma, s)(\tau)} \det \left(1 + \prod_{\tau = 1}^{m\Delta \tau} \ee^{\Delta \tau t \sigma(\tau)}\right) \\
+        &= \prod_{\tau = 1}^{m\Delta \tau} \mel{\sigma(\tau + \Delta \tau)}{\ee^{-\Delta \tau H_Z}}{\sigma(\tau)} \mel{s(\tau + \Delta \tau)}{\ee^{-\Delta \tau H_\text{ising}|_{\sigma(\tau)}}}{s(\tau)} \det \left(1 + \prod_{\tau = 1}^{m\Delta \tau} \ee^{\Delta \tau t \sigma(\tau)}\right).
+    \end{aligned}
+\]
+where $\sigma = \{\sigma_{\vb*{i} \vb*{j}}(\tau)\}$ and $s = \{s_{i}(\tau)\}$, and in the last line values of $\sigma(\tau)$ replaces the $\sigma^z$ operators in $H_\text{ising}$.
+
+
+\subsection{Quantum fluctuation introduced by $H_h$}
+
+With the presence of $H_h$, the $H_Z$ factor of each imaginary time step reads
+\[
+    \begin{aligned}
+        &\quad \mel{\sigma(\tau + \Delta \tau)}{\ee^{-\Delta \tau H_{Z0}} \ee^{-\Delta \tau H_h}}{\sigma(\tau)} \\ 
+        &= \ee^{-\Delta \tau H_{Z0}|_{\sigma(\tau)}} \sum_{\sigma^x} \ee^{-\Delta \tau H_h|_{\sigma^x}} \braket{\sigma^z(\tau+\Delta \tau)}{\sigma^x} \braket{\sigma^x}{\sigma^z(\tau)} \\
+        &= \ee^{-\Delta \tau H_{Z0}|_{\sigma(\tau)}} \sum_{\sigma^x} \ee^{h \Delta \tau \sum_{\pair{\vb*{i}, \vb*{j}}} \sigma^x_{\vb*{i} \vb*{j}}} \braket{\sigma^z(\tau+\Delta \tau)}{\sigma^x} \braket{\sigma^x}{\sigma^z(\tau)} \\
+        &= \ee^{-\Delta \tau H_{Z0}|_{\sigma(\tau)}} \prod_{\text{bond } l} \sum_{\sigma^x_l =\pm 1} \ee^{h \Delta \tau \sigma^x_l} \braket{\sigma^z_l(\tau+\Delta \tau)}{\sigma^x_l} \braket{\sigma^x_l}{\sigma^z_l(\tau)} \\
+        &= \ee^{-\Delta \tau H_{Z0}|_{\sigma(\tau)}} \prod_{\text{bond } l} \sum_{\sigma^x_l =\pm 1} \ee^{h \Delta \tau \sigma^x_l} \braket{\sigma^z_l(\tau+\Delta \tau)}{\sigma^x_l} \braket{\sigma^x_l}{\sigma^z_l(\tau)}.
+    \end{aligned}
+\]
+By the formula
+\[
+    \braket{\sigma^x_l}{\sigma^z_l(\tau)} = \frac{1}{\sqrt{2}} \ee^{\ii \pi \frac{1 - \sigma^x_l}{2} \frac{1 - \sigma^z_l(\tau)}{2}} ,
+\]
+we have
+\[
+    \begin{aligned}
+        &\quad \mel{\sigma(\tau + \Delta \tau)}{\ee^{-\Delta \tau H_{Z0}} \ee^{-\Delta \tau H_h}}{\sigma(\tau)} \\
+        &= \ee^{-\Delta \tau H_{Z0}|_{\sigma(\tau)}} \prod_{\text{bond } l} \sum_{\sigma^x_l =\pm 1} \ee^{h \Delta \tau \sigma^x_l} \frac{1}{2} \ee^{\ii \pi \frac{1 - \sigma^x_l}{2} \frac{1 - \sigma^z_l(\tau)}{2}} \ee^{\ii \pi  \frac{1 - \sigma^x_l}{2} \frac{1 - \sigma^z_l(\tau + \Delta \tau)}{2}} \\
+        &= \frac{1}{2^{2N}} \ee^{-\Delta \tau H_{Z0}|_{\sigma(\tau)}} \prod_{\text{bond } l} \left( \ee^{h \Delta \tau} + \ee^{- h \Delta \tau} \ee^{\ii \pi (\frac{1 - \sigma^z_l(\tau)}{2} + \frac{1 - \sigma^z_l(\tau + \Delta \tau)}{2})} \right) \\
+        &= \frac{1}{2^{2N}} \ee^{-\Delta \tau H_{Z0}|_{\sigma(\tau)}} \prod_{\text{bond } l} \left( \ee^{h \Delta \tau} + \ee^{- h \Delta \tau} \sigma_l^z(\tau) \sigma_l^z(\tau + \Delta \tau) \right) \\
+        &= \frac{1}{2^{2N}} \ee^{-\Delta \tau H_{Z0}|_{\sigma(\tau)}} \prod_{\text{bond } l} \ee^{J_\tau \sigma_l^z(\tau) \sigma_l^z(\tau + \Delta \tau)}.
+    \end{aligned}
+\]
+where 
+\begin{equation}
+    \tanh J_\tau = \ee^{-2 h \Delta \tau}.
+\end{equation}
+The last few steps all use the fact that $\sigma^z_l = \pm 1$.
+With the gauge $\sigma_{i, i+\hat{x}} = 1$, the weight 
+
+\subsection{The fermions}
+
+The Hamiltonian about fermions in the model is a tight-binding Hamiltonian with its hopping constants being the same as $\sigma_{\vb*{i} \vb*{j}}$, which endows the fermions $\mathbb{Z}_2$ charges.
+When the $\mathbb{Z}_2$ charges get trapped into a confined phase, it can be expected that the fermions are also confined.
+Or, in other words, the fermions are now gapped: a slight push on one of them will not brings in any significant effects, so the Green functions of the fermions vanish.
+
+TODO: but the author claims there is conventional metal with high $T$ ... ?
+
+\section{Monte Carlo simulation}
+
+\subsection{Examine the phase diagram of $\mathbb{Z}_2$ gauge field}
+
+Since $J_x$ and $J_y$ differ a lot, Metropolis algorithm is incapable for the simulation of the anisotropic Ising model.
+Cluster update methods must be used.
+
+\subsection{Get Fermions involved}
+
+\bibliographystyle{plain}
+\bibliography{note} 
+
+\end{document}
