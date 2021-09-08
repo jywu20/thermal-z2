@@ -31,3 +31,5 @@ Further tests may be needed, to find out:
 Add introduction of orthogonal metals into `docs/note.tex`.
 
 `phase-diagram-transverse-ising-metropolis.PNG` and `phase-diagram-transverse-ising-wolff.PNG` are copied from `visconfs` to `docs/phase`.
+
+Deprecated `fermion-coupling-prototype/hopping-hamiltonian.jl`. The file is moved into `deprecated`.
