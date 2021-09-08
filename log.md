@@ -25,3 +25,9 @@ Further tests may be needed, to find out:
 - why the transition point seem to be $h = 1.2$ instead of $h = 1$
 - what is the best choice of $T$
 - how to simulate the finite temperature case
+
+# 2021.9.8 
+
+Add introduction of orthogonal metals into `docs/note.tex`.
+
+`phase-diagram-transverse-ising-metropolis.PNG` and `phase-diagram-transverse-ising-wolff.PNG` are copied from `visconfs` to `docs/phase`.
