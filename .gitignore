@@ -6,7 +6,6 @@
 *.out
 *.fdb_latexmk
 *.jpg
-*.pdf
 *.exe
 *.toc
 *.bbl
