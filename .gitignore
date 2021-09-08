@@ -1,0 +1,13 @@
+*.dat
+*.log
+*.synctex.gz
+*.aux
+*.fls
+*.out
+*.fdb_latexmk
+*.jpg
+*.pdf
+*.exe
+*.toc
+*.bbl
+*.blg
