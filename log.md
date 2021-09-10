@@ -34,4 +34,6 @@ Add introduction of orthogonal metals into `docs/note.tex`.
 
 Deprecated `fermion-coupling-prototype/hopping-hamiltonian.jl`. The file is moved into `deprecated`.
 
-Start to develop 
+# 2021.9.10
+
+Rename `src/pure-z2` to `src/pure-z2-mapped-to-spin-chain`, because it seems that with a strong transverse field, we cannot simply map a $\mathbb{Z}_2$ gauge field into a bundle of spin chains.
