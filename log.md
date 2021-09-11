@@ -37,3 +37,12 @@ Deprecated `fermion-coupling-prototype/hopping-hamiltonian.jl`. The file is move
 # 2021.9.10
 
 Rename `src/pure-z2` to `src/pure-z2-mapped-to-spin-chain`, because it seems that with a strong transverse field, we cannot simply map a $\mathbb{Z}_2$ gauge field into a bundle of spin chains.
+
+Create `analytical` folder for calculating and plotting analytical results.
+
+# 2021.9.11
+
+`2d-tfim-to-3d-cim.jl` and `2d-tfim-to-3d-cim-prototype.jl` are moved into `analytical/jxy-jtau-ratio`.
+
+`2d-tfim-to-3d-cim.jl` is used to create `ratio-h=1.PNG` and `ratio-h=4.PNG`.
+They are copied to `docs/montecarlo`. 

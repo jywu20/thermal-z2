@@ -7,6 +7,7 @@ Details about the model can be found in `docs/note.tex`.
 
 # Project organization
 
-## `src/pure-z2`
+## `src/pure-z2-mapped-to-spin-chain`
 
-Simulation of pure $\mathbb{Z}_2$ gauge field.
+Simulation of pure $\mathbb{Z}_2$ gauge field by mapping the $\mathbb{Z}_2$ degrees of freedom into spins in
+a 1D transverse Ising chain. 

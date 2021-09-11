@@ -4,6 +4,8 @@
         "gapless",
         "Ising",
         "plaquette",
-        "sublattices"
+        "sublattices",
+        "TFIM",
+        "Wegner"
     ]
 }
