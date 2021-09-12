@@ -36,7 +36,8 @@ Deprecated `fermion-coupling-prototype/hopping-hamiltonian.jl`. The file is move
 
 # 2021.9.10
 
-Rename `src/pure-z2` to `src/pure-z2-mapped-to-spin-chain`, because it seems that with a strong transverse field, we cannot simply map a $\mathbb{Z}_2$ gauge field into a bundle of spin chains.
+Rename `src/pure-z2` to `src/pure-z2-mapped-to-spin-chain`, 
+because it seems that with a strong transverse field, we cannot simply map a $\mathbb{Z}_2$ gauge field into a bundle of spin chains.
 
 Create `analytical` folder for calculating and plotting analytical results.
 
@@ -46,3 +47,14 @@ Create `analytical` folder for calculating and plotting analytical results.
 
 `2d-tfim-to-3d-cim.jl` is used to create `ratio-h=1.PNG` and `ratio-h=4.PNG`.
 They are copied to `docs/montecarlo`. 
+
+# 2021.9.12
+
+Create `analytical/jxy-jtau-ratio/2d-tfim-to-3d-two-ways.jl` to check whether the two ways to calculate the effective interaction coefficient in the temporal direction, 
+namely `-log.(tanh.(Δτ * h_range)) / 2` and `atanh.(exp.(- Δτ * h_range))`, agree.
+
+It seems that they don't agree ...
+
+After change `atanh.(exp.(- Δτ * h_range))` into `atanh.(exp.(- 2Δτ * h_range))` they agree. Update `docs/note.tex` for this change.
+
+`src\pure-z2-mapped-to-spin-chain\anisotropic_ising.jl` is copied into `3d-ising-metropolis-prototype\wolff-3d.jl` and adjusted into a 3D Wolff algorithm, which is not tested yet.

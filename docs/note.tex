@@ -331,7 +331,7 @@ so
 \]
 where
 \[
-    \tanh J_\tau = \ee^{\Delta \tau h}.
+    \tanh J_\tau = \ee^{2 \Delta \tau h}.
 \]
 So the discrete path integral of \eqref{eq:tfim-hamiltonian} with time step $\Delta \tau$ shares its weights with the partition function of the \cim
 \begin{equation}
@@ -340,9 +340,10 @@ So the discrete path integral of \eqref{eq:tfim-hamiltonian} with time step $\De
 \end{equation}
 at $T = 1$, where
 \begin{equation}
-    J_{xy} = \Delta \tau J, \quad \tanh J_\tau = \ee^{\Delta \tau h}.
+    J_{xy} = \Delta \tau J, \quad \tanh J_\tau = \ee^{2 \Delta \tau h}.
 \end{equation}
 
+% TODO: the figures used in the following figure are wrong.
 \begin{figure}
     \centering
     \begin{subfigure}{0.48\textwidth}
@@ -493,7 +494,8 @@ Since $J_x$ and $J_y$ differ a lot, Metropolis algorithm is incapable for the si
 Cluster update methods - in this project Wolff cluster updating \cite{Wolff_1989} - must be used.
 \prettyref{fig:comparision-metropolis-wolff} shows a comparison between Metropolis algorithm and Wolff algorithm, 
 where Metropolis algorithm cannot update the system sufficiently when $h=0$, 
-since in that case the 2D \cim corresponding to the 1D transverse field Ising chain degenerates into a classical 1D Ising chain due to the vanishing quantum fluctuation, so the coupling strength in the temporal direction approaches to infinite.
+since in that case the 2D \cim corresponding to the 1D transverse field Ising chain degenerates into a classical 1D Ising chain due to the vanishing quantum fluctuation, 
+so the coupling strength in the temporal direction approaches to infinite.
 
 
 
