@@ -3,12 +3,12 @@ using Statistics
 using ProgressMeter
 using LaTeXStrings
 
-include("ising-3d.jl")
+include("../src/ising-3d.jl")
 
 function magnetization(;Jx, Jy, Jz, β, nx, ny, nz, n_bin, n_heat, n_sweep)
     sim_params_heat = AnisotropicIsingSimParams3DWolff(nx, ny, nz, n_heat)
     ham_params = AnisotropicIsingModel3D(β * Jx, β * Jy, β * Jz)
-    ising_field = init_field_3d(Int64, sim_params_heat)
+    ising_field = init_field_3d_ones(Int64, sim_params_heat)
     run!(ising_field, ham_params, sim_params_heat)
 
     sim_params = AnisotropicIsingSimParams3DWolff(nx, ny, nz, n_sweep)
@@ -26,7 +26,7 @@ progress = Progress(length(T_range) * length(J_range))
 mag = zeros(length(T_range), length(J_range))
 
 n_side = 10
-n_bin = 10
+n_bin = 1
 n_heat = 100
 n_sweep = 100
 

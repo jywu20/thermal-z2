@@ -70,3 +70,5 @@ Add Metropolis algorithm in `3d-ising-metropolis-prototype`.
 It seems that for both Wolff algorithm and Metropolis algorithm, setting the initial field configuration to all-one
 speeds up convergence.
 This is different with the case in 2D.
+
+Refactor `3d-ising-metropolis-prototype`.
