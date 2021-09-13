@@ -58,3 +58,7 @@ It seems that they don't agree ...
 After change `atanh.(exp.(- Δτ * h_range))` into `atanh.(exp.(- 2Δτ * h_range))` they agree. Update `docs/note.tex` for this change.
 
 `src\pure-z2-mapped-to-spin-chain\anisotropic_ising.jl` is copied into `3d-ising-metropolis-prototype\wolff-3d.jl` and adjusted into a 3D Wolff algorithm, which is not tested yet.
+
+# 2021.9.13
+
+Add Metropolis algorithm in `3d-ising-metropolis-prototype`.

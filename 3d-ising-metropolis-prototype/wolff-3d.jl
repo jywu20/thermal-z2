@@ -25,7 +25,7 @@ end
 function init_field_3d(
     ::Type{S}, 
     params::AnisotropicIsingSimParams3DWolff{N}
-)::IsingField3D{S} where {N, S <: Integer}
+)::IsingField3D{S} where {N <: Integer, S <: Integer}
     nx = params.nx
     ny = params.ny
     nz = params.nz
@@ -44,7 +44,7 @@ function run!(
     model::AnisotropicIsingModel3D{F}, 
     params::AnisotropicIsingSimParams3DWolff{N};
     observe = nothing
-) where {F <: AbstractFloat, S, N <: Integer}
+) where {F <: AbstractFloat, S <: Integer, N <: Integer}
     Jx = model.Jx
     Jy = model.Jy
     Jz = model.Jz

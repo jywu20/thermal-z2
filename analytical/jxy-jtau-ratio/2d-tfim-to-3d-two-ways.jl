@@ -14,3 +14,11 @@ h_range = LinRange(0.0, 1.5, 40)
 
 p = plot(h_range, atanh.(exp.(- 2 * Δτ * h_range)))
 plot!(p, h_range, -log.(tanh.(Δτ * h_range)) / 2)
+
+##
+
+Δτ_range = LinRange(0.0, 1.0, 50)
+h = 1
+
+p = plot(Δτ_range, atanh.(exp.(- 2 * Δτ_range * h)))
+plot!(p, Δτ_range, -log.(tanh.(Δτ_range * h)) / 2)

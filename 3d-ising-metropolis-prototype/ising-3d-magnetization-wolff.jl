@@ -19,7 +19,7 @@ end
 
 ##
 
-T_range = LinRange(0.01, 3, 50)
+T_range = LinRange(0.01, 6, 60)
 J_range = LinRange(0.01, 4, 50)
 
 progress = Progress(length(T_range) * length(J_range))
@@ -42,4 +42,14 @@ end
 
 ##
 
-heatmap(J_range, T_range, mag, xlabel = L"J", ylabel = L"T")
+p = heatmap(J_range, T_range, mag, xlabel = L"J", ylabel = L"T")
+J_range_analytical = LinRange(J_range[1], J_range[end], 50)
+plot!(p, J_range_analytical, J_range_analytical / 0.2216544, legend = false)
+ylims!(p, T_range[1], T_range[end])
+xlims!(p, J_range[1], J_range[end])
+
+##
+
+J_one_index = argmin(@. abs(J_range - 1))
+
+plot(T_range, mag[:, J_one_index])
