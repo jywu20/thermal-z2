@@ -17,6 +17,15 @@ function init_field_3d(
     rand((zero(S), one(S)), (nx, ny, nz))
 end
 
+function init_field_3d_ones(
+    ::Type{S},
+    params::AnisotropicIsingSimParams3DMetropolis{N}
+)::IsingField3D{S} where {N <: Integer, S <: Integer}
+    @unpack nx, ny, nz = params
+
+    ones(S, nx, ny, nz)
+end
+
 function accept_rate(field::IsingField3D{S}, 
     model::AnisotropicIsingModel3D{F},
     params::AnisotropicIsingSimParams3DMetropolis{N},

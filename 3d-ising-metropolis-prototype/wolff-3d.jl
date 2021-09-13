@@ -33,6 +33,15 @@ function init_field_3d(
     rand((zero(S), one(S)), (nx, ny, nz))
 end
 
+function init_field_3d_ones(
+    ::Type{S},
+    params::AnisotropicIsingSimParams3DWolff{N}
+)::IsingField3D{S} where {N <: Integer, S <: Integer}
+    @unpack nx, ny, nz = params
+
+    ones(S, nx, ny, nz)
+end
+
 function flip!(ising_field::IsingField3D, cluster)
     for pos in cluster
         ising_field[pos...] *= -1

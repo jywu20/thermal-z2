@@ -12,18 +12,33 @@ struct TransverseFieldIsingModel2D{F <: AbstractFloat}
     h::F
 end
 
-struct TransverseFieldIsingSimParams2D{F <: AbstractFloat, N <: Integer}
+struct TransverseFieldIsingSimParams2DWolff{F <: AbstractFloat, N <: Integer}
     β::F
     n_steps::N
+    n_side::N
 end
+
+struct TransverseFieldIsingSimParams2DMetropolis{F <: AbstractFloat, N <: Integer}
+    β::F
+    n_steps::N
+    n_side::N
+end
+
+const TransverseFieldIsingSimParams2DNaivePathIntegral = Union{
+    TransverseFieldIsingSimParams2DMetropolis, 
+    TransverseFieldIsingSimParams2DWolff
+}
 
 """
 Map the parameters of a 2d transverse field Ising model (TFIM) into ones of a 3d classical Ising model (CIM).
 """
 function tfim_2d_to_cim_3d(
     model::TransverseFieldIsingModel2D{F}, 
-    sim_params::TransverseFieldIsingSimParams2D{F, N}
-)::AnisotropicIsingModel3D{F} where {F <: AbstractFloat, N <: Integer}
+    sim_params::Sim{F, N}
+)::AnisotropicIsingModel3D{F} where {
+    F <: AbstractFloat, N <: Integer, 
+    Sim <: TransverseFieldIsingSimParams2DNaivePathIntegral
+}
     β = sim_params.β
     n_steps = sim_params.n_steps
     Δτ = β / n_steps
@@ -35,3 +50,12 @@ function tfim_2d_to_cim_3d(
 
     AnisotropicIsingModel3D(Jxy, Jxy, Jτ)
 end
+
+run!(
+    field::TFIsingFieldWolff2D{S},
+    model::TransverseFieldIsingModel2D{F},
+    params::TransverseFieldIsingSimParams2DWolff{F, N};
+    observe = nothing
+) where {F <: AbstractFloat, S <: Integer, N <: Integer} = 
+    run!(field, tfim_2d_to_cim_3d(model, params), 
+        AnisotropicIsingSimParams3DWolff(params.n_side, params.n_side, params.n_steps), observe = observe)

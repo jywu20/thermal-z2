@@ -37,7 +37,8 @@ Deprecated `fermion-coupling-prototype/hopping-hamiltonian.jl`. The file is move
 # 2021.9.10
 
 Rename `src/pure-z2` to `src/pure-z2-mapped-to-spin-chain`, 
-because it seems that with a strong transverse field, we cannot simply map a $\mathbb{Z}_2$ gauge field into a bundle of spin chains.
+because it seems that with a strong transverse field, 
+we cannot simply map a $\mathbb{Z}_2$ gauge field into a bundle of spin chains.
 
 Create `analytical` folder for calculating and plotting analytical results.
 
@@ -55,10 +56,17 @@ namely `-log.(tanh.(Δτ * h_range)) / 2` and `atanh.(exp.(- Δτ * h_range))`, 
 
 It seems that they don't agree ...
 
-After change `atanh.(exp.(- Δτ * h_range))` into `atanh.(exp.(- 2Δτ * h_range))` they agree. Update `docs/note.tex` for this change.
+After change `atanh.(exp.(- Δτ * h_range))` into `atanh.(exp.(- 2Δτ * h_range))` they agree. 
+Update `docs/note.tex` for this change.
 
 `src\pure-z2-mapped-to-spin-chain\anisotropic_ising.jl` is copied into `3d-ising-metropolis-prototype\wolff-3d.jl` and adjusted into a 3D Wolff algorithm, which is not tested yet.
 
 # 2021.9.13
 
 Add Metropolis algorithm in `3d-ising-metropolis-prototype`.
+
+`magnetization-metropolis-ones-init.PNG` and other three images are created in `3d-ising-metropolis-prototype`.
+
+It seems that for both Wolff algorithm and Metropolis algorithm, setting the initial field configuration to all-one
+speeds up convergence.
+This is different with the case in 2D.
