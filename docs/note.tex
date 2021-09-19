@@ -74,9 +74,11 @@
 
 \newcommand*{\Ztwo}{$\mathbb{Z}_2$ }
 \newcommand*{\tfim}{transverse field Ising model }
+\newcommand*{\TFIM}{Transverse Field Ising Model }
 \newcommand*{\cim}{classical Ising model }
+\newcommand*{\CIM}{Classical Ising Model }
 
-\title{\Ztwo gauge field coupled to a fermion system}
+\title{\Ztwo Gauge Field Coupled to a Fermion System}
 \author{Jinyuan Wu}
 
 \begin{document}
@@ -85,7 +87,7 @@
 
 In the whole article we use $\sigma$ and $s$ as shorthands of $\sigma^z$ and $s^z$, unless confusion may be caused by the notation.
 
-\section{The model Hamiltonian}
+\section{The Model Hamiltonian}
 
 The model investigated in this article is shown in \cite{moon2019deconfined}.
 The model Hamiltonian is 
@@ -103,9 +105,9 @@ Such kind of model Hamiltonian usually emerges from orthogonal metals \cite{moon
 
 In this section, we introduce every part of \eqref{eq:proposed-model}.
 
-\subsection{\Ztwo gauge field and its dual theories}
+\subsection{\Ztwo Gauge Field and Its Dual Theories}
 
-\subsubsection{The plaquette term}
+\subsubsection{The Plaquette Term}
 
 \begin{figure}
     \centering
@@ -129,7 +131,7 @@ which is invariant under a \Ztwo gauge transformation
 A convenient convention is to let a plaquette share the same index with the site in its left bottom corner. 
 An example of a \Ztwo gauge field configuration can be found in \prettyref{fig:z2-gauge-field}.
 
-\subsubsection{The transverse field}
+\subsubsection{The Transverse Field}
 
 We name the \Ztwo gauge theory with plaquette terms only as the \concept{Wegner model}, i.e.
 \begin{equation}
@@ -148,7 +150,7 @@ where the parameter $h$ measures the quantum fluctuation.
 \eqref{eq:transverse-field} obviously commutes with $\vb*{Q}_{\vb*{i}}$ for every $\vb*{i}$, so it can be a term in a \Ztwo gauge invariant Hamiltonian. 
 In the language of string-net condensation, $H_h$ is a string tension term.
 
-\subsubsection{Equivalence between a \Ztwo gauge theory when $h = 0$ and a bundle of Ising chains}
+\subsubsection{Equivalence between a \Ztwo Gauge Theory When $h = 0$ and a Bundle of Ising Chains}
 
 \begin{figure}
     \centering
@@ -160,7 +162,7 @@ Now we consider a \Ztwo field theory with the plaquette term only, or in other w
 With the gauge choice
 \begin{equation}
     \sigma_{\vb*{i}, \vb*{i}+\vu*{x}} = 1,
-    \label{eq:gauge-choice}
+    \label{eq:gauge-choice-x}
 \end{equation}
 we have
 \begin{equation}
@@ -194,11 +196,11 @@ so the model is actually a bundle of 1D Ising spin chain.
     \caption{Converting a \Ztwo gauge field theory into a bundle of Ising chains. There is no interaction between parallel Ising chains.}
 \end{figure}
 
-\subsubsection{Mapping a \Ztwo gauge theory into a 2D \tfim}
+\subsubsection{Mapping a \Ztwo Gauge Theory into a 2D \TFIM}
 
 
 
-\subsubsection{Absence of a finite temperature deconfined phase}\label{sec:absence-of-z2-deconfined-phase}
+\subsubsection{Absence of a Finite Temperature Deconfined Phase}\label{sec:absence-of-z2-deconfined-phase}
 
 When $T=0$ and $h \ll g$, the \Ztwo gauge field exhibits a \emph{deconfined} phase, i.e. there are freely moving \Ztwo excitations such as \Ztwo fluxes.
 
@@ -217,7 +219,7 @@ Here the terminology may cause confusion: we do not actually know if the "finite
 With the criteria of Wilson loops we know the "deconfined" phase obeys the perimeter law, agreeing with the ordinary deconfined phase in Wegner model, but whether the Wilson loop operator is a good detector in non-local models is still under question, because in local models, existence of long range correlation indicates exotic phenomena, while in non-local models long range correlation may be a trivial consequence of the non-locality.
 All these questions remain open, and in this project we simply use the terms "confined" and "deconfined" as a shorthand of the two phases in a \Ztwo gauge field theory with a dual theory of Dyson-Ising spin chains, without inquiring into their similarity and discrepancy with local \Ztwo theories such as Wegner model.
 
-\subsubsection{(Trivial) deconfined phase in models with long-range interaction}
+\subsubsection{(Trivial) Deconfined Phase in Models with Long-range Interaction}
 
 If we are to extend the deconfined phase to $T>0$, at least some stronger correlation must be introduced.
 Without introducing quantum fluctuation, a reasonable proposal may be 
@@ -293,9 +295,9 @@ The weight of a configuration is
 where $\sigma = \{\sigma_{\vb*{i} \vb*{j}}(\tau)\}$ and $s = \{s_{\vb*{i}}(\tau)\}$, 
 and in the last line values of $\sigma(\tau)$ replaces the $\sigma^z$ operators in $H_\text{Ising}$.
 
-\subsection{Path integral for 2D \tfim}
+\subsection{Path integral for 2D \TFIM}
 
-\subsubsection{From 2D \tfim to 3D \cim}
+\subsubsection{From 2D \TFIM to 3D \CIM}
 
 In this section we use $\sigma$ to denote spin-$1/2$ degrees of freedom in a 2D \tfim.
 This notation conflicts with the symbol $\sigma$ for \Ztwo gauge field, 
@@ -371,7 +373,9 @@ and with strong quantum fluctuation $\Delta \tau$ must be small enough to accura
 
 The anisotropic feature of \eqref{eq:cim-from-tfim} is tackled in \cite{Blte2002}.
 
-\subsubsection{Worm algorithm for 2D \tfim}
+We did a benchmark of our algorithm with data provided in \cite{Friedman_1978}.
+
+\subsubsection{Worm Algorithm for 2D \TFIM}
 
 Another way to simulate 2D \tfim is described in \cite{Huang_2020}.
 We do the following (canonical) substitution
@@ -469,9 +473,9 @@ where
 The last few steps all use the fact that $\sigma^z_l = \pm 1$.
 With the gauge $\sigma_{i, i+\hat{x}} = 1$, the weight 
 
-\section{Monte Carlo simulation of the pure \Ztwo gauge theory}
+\section{Monte Carlo Simulation of the Pure \Ztwo Gauge Theory with Gauge \eqref{eq:gauge-choice-x}}
 
-\subsection{The phase diagram}
+\subsection{The Phase Diagram}
 
 \begin{figure}
     \centering
@@ -498,8 +502,9 @@ since in that case the 2D \cim corresponding to the 1D transverse field Ising ch
 so the coupling strength in the temporal direction approaches to infinite.
 
 
+\section{Monte Carlo Simulation of \eqref{eq:proposed-model}}
 
-\section{Monte Carlo simulation of \eqref{eq:proposed-model}}
+The way to update fermions can be found in the appendix of \cite{Chen_2021}.
 
 \bibliographystyle{plain}
 \bibliography{note} 

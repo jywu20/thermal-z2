@@ -72,3 +72,11 @@ speeds up convergence.
 This is different with the case in 2D.
 
 Refactor `3d-ising-metropolis-prototype`.
+
+# 2021.9.19
+
+`3d-ising-metropolis-prototype` is renamed to `3d-ising-prototype`.
+In `3d-ising-prototype/examples`, all isotropic data is moved to `isotropic`.
+
+A new folder named `transverse` is created for simulation of 2D TFIM.
+`tfim-2d-magnetic-susceptibility-wolff-from-ones.PNG` and `tfim-2d-magnetization-wolff-from-ones.PNG` are created using `3d-ising-prototype/examples/transverse/tfim-2d-magnetization-wolff-from-ones.jl`.

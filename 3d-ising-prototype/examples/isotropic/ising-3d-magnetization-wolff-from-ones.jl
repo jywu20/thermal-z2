@@ -3,7 +3,7 @@ using Statistics
 using ProgressMeter
 using LaTeXStrings
 
-include("../src/ising-3d.jl")
+include("../../src/ising-3d.jl")
 
 function magnetization(;Jx, Jy, Jz, β, nx, ny, nz, n_bin, n_heat, n_sweep)
     sim_params_heat = AnisotropicIsingSimParams3DWolff(nx, ny, nz, n_heat)
