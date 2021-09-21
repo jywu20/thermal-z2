@@ -80,3 +80,5 @@ In `3d-ising-prototype/examples`, all isotropic data is moved to `isotropic`.
 
 A new folder named `transverse` is created for simulation of 2D TFIM.
 `tfim-2d-magnetic-susceptibility-wolff-from-ones.PNG` and `tfim-2d-magnetization-wolff-from-ones.PNG` are created using `3d-ising-prototype/examples/transverse/tfim-2d-magnetization-wolff-from-ones.jl`.
+
+Create folder `src/pure-z2-dual-tfim`.

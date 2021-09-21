@@ -20,7 +20,7 @@
 \usepackage{listings}
 \usepackage{autobreak}
 \usepackage[ruled, vlined, linesnumbered, noend]{algorithm2e}
-\usepackage[colorlinks, linkcolor=black, anchorcolor=black, citecolor=black, urlcolor=black]{hyperref}
+\usepackage[colorlinks]{hyperref} % , linkcolor=black, anchorcolor=black, citecolor=black, urlcolor=black
 \usepackage{prettyref}
 
 % Page style
@@ -149,6 +149,11 @@ In this project we consider a transverse field Hamiltonian in the form of
 where the parameter $h$ measures the quantum fluctuation.
 \eqref{eq:transverse-field} obviously commutes with $\vb*{Q}_{\vb*{i}}$ for every $\vb*{i}$, so it can be a term in a \Ztwo gauge invariant Hamiltonian. 
 In the language of string-net condensation, $H_h$ is a string tension term.
+So when we say ``\Ztwo gauge theory'', usually we are referring to 
+\begin{equation}
+    H = - J \sum_{\vb*{i}} \prod_{\vb*{l} \in \Box_{\vb*{i}^*}} \sigma_{\vb*{l}} - h \sum_{\pair{\vb*{i}, \vb*{j}}} \sigma_{\vb*{i} \vb*{j}}^x.
+    \label{eq:standard-z2-theory}
+\end{equation}
 
 \subsubsection{Equivalence between a \Ztwo Gauge Theory When $h = 0$ and a Bundle of Ising Chains}
 
@@ -198,7 +203,12 @@ so the model is actually a bundle of 1D Ising spin chain.
 
 \subsubsection{Mapping a \Ztwo Gauge Theory into a 2D \TFIM}
 
+\begin{equation}
+    H = - h \sum_{\pair{\vb*{I}, \vb*{J}}} \tau^z_{\vb*{I}} \tau^z_{\vb*{J}} - J \sum_{\vb*{I}} \tau^x_{\vb*{I}}.
+    \label{eq:z2-dual-theory}
+\end{equation}
 
+\eqref{eq:z2-dual-theory} is often called the \concept{dual \tfim} of \Ztwo gauge theory \eqref{eq:standard-z2-theory}.
 
 \subsubsection{Absence of a Finite Temperature Deconfined Phase}\label{sec:absence-of-z2-deconfined-phase}
 
@@ -501,6 +511,33 @@ where Metropolis algorithm cannot update the system sufficiently when $h=0$,
 since in that case the 2D \cim corresponding to the 1D transverse field Ising chain degenerates into a classical 1D Ising chain due to the vanishing quantum fluctuation, 
 so the coupling strength in the temporal direction approaches to infinite.
 
+\section{Monte Carlo Simulation of the Pure \Ztwo Theory's Dual Transverse Field Ising Model}
+
+\subsection{Benchmark of the Algorithms}
+
+\subsubsection{Metropolis and Wolff update for \CIM}
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width=\textwidth]{../3d-ising-prototype/examples/isotropic/magnetization-metropolis-random-init.PNG}
+        \subcaption{Metropolis, random initial configuration}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width=\textwidth]{../3d-ising-prototype/examples/isotropic/magnetization-metropolis-ones-init.PNG}
+        \subcaption{Metropolis, initially FM}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width=\textwidth]{../3d-ising-prototype/examples/isotropic/magnetization-wolff-random-init.PNG}
+        \subcaption{Wolff, random initial configuration}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width=\textwidth]{../3d-ising-prototype/examples/isotropic/magnetization-wolff-ones-init.PNG}
+        \subcaption{Wolff, initially FM}
+    \end{subfigure}
+    \caption{Simulation of 3D \cim using Metropolis update and Wolff update. The data of the straight lines comes from \cite{Talapov_1996}.}
+    \label{fig:3d-cim-benchmark}
+\end{figure}
 
 \section{Monte Carlo Simulation of \eqref{eq:proposed-model}}
 
