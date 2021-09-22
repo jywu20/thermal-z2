@@ -82,3 +82,15 @@ A new folder named `transverse` is created for simulation of 2D TFIM.
 `tfim-2d-magnetic-susceptibility-wolff-from-ones.PNG` and `tfim-2d-magnetization-wolff-from-ones.PNG` are created using `3d-ising-prototype/examples/transverse/tfim-2d-magnetization-wolff-from-ones.jl`.
 
 Create folder `src/pure-z2-dual-tfim`.
+
+# 2021.9.21
+
+After discussion with Yang Qi, we conclude that
+- the gauge choice in (Moon, 2019) is wrong, and
+- the perturbation theory is not well justified, and
+- it is better to simulate $\mathbb{Z}_2$ gauge field as it is, instead of transform it into a model without gauge redundancy
+
+TODO:
+- read an article about QMC of $\mathbb{Z}_2$ gauge theory by Sachdev and others.
+
+# 2021.9.22

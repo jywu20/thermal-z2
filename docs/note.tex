@@ -440,6 +440,7 @@ As a result, the field configuration used in the path integral is something like
 a string is created, and then distorted, and finally annihilated.
 So each field configuration used in the path integral is a set of \emph{closed} strings or loops, 
 which are just \emph{world lines} of magnons, as is depicted in \prettyref{fig:tfim-worldline}.
+We name the $\sigma^+ \sigma^+ + \text{h.c.}$ terms as \concept{pairing}, the $\sigma^+ \sigma^- + \text{h.c.}$ terms \concept{hopping}.
 
 \begin{figure}
     \centering
@@ -449,6 +450,16 @@ which are just \emph{world lines} of magnons, as is depicted in \prettyref{fig:t
 \end{figure}
 
 Now we write down the partition function in the path integral form.
+Suppose there are $m$ time steps. The discrete path integral is 
+\begin{equation}
+    Z = \sum_{\{\sigma_\tau\}} \mel{\sigma_0}{\ee^{-\Delta \tau H}}{\sigma_\beta} \cdots \mel{\sigma_{2\Delta \tau}}{\ee^{-\Delta \tau H}}{\sigma_{\Delta \tau}} \mel{\sigma_{\Delta \tau}}{\ee^{-\Delta \tau H}}{\sigma_{0}}  
+\end{equation}
+where $\sigma_\tau$ is an arbitrary configuration in the $\sigma^z$ basis.
+We classify $\{\sigma_\tau\}$ first according to the number of pairing and hopping, and denote them as $N_\text{p}$ and $N_\text{h}$, respectively.
+The weight of a field configuration with $N_\text{p}$ pairing fragments and $N_\text{h}$ hopping fragments is
+\[
+    \mel{\sigma_0}{\ee^{-\Delta \tau H}}{\sigma_\beta} \cdots \mel{\sigma_{2\Delta \tau}}{\ee^{-\Delta \tau H}}{\sigma_{\Delta \tau}} \mel{\sigma_{\Delta \tau}}{\ee^{-\Delta \tau H}}{\sigma_{0}} = 
+\]
 
 \subsection{Quantum fluctuation introduced by $H_h$}
 
