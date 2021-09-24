@@ -157,12 +157,6 @@ So when we say ``\Ztwo gauge theory'', usually we are referring to
 
 \subsubsection{Equivalence between a \Ztwo Gauge Theory When $h = 0$ and a Bundle of Ising Chains}
 
-\begin{figure}
-    \centering
-    \input{lattice/gauge-sublattice.tex}
-    \caption{Dividing a gauge field configuration into two sublattices}
-\end{figure}
-
 Now we consider a \Ztwo field theory with the plaquette term only, or in other words, we investigate the Wegner model.
 With the gauge choice
 \begin{equation}
@@ -461,8 +455,11 @@ The weight of a field configuration with $N_\text{p}$ pairing fragments and $N_\
     \mel{\sigma_0}{\ee^{-\Delta \tau H}}{\sigma_\beta} \cdots \mel{\sigma_{2\Delta \tau}}{\ee^{-\Delta \tau H}}{\sigma_{\Delta \tau}} \mel{\sigma_{\Delta \tau}}{\ee^{-\Delta \tau H}}{\sigma_{0}} = 
 \]
 
-\subsection{Quantum fluctuation introduced by $H_h$}
+\subsection{Simulating \Ztwo Gauge Theory as It is}
 
+\subsubsection{Discrete Path Integral of \Ztwo Guage Theory}
+
+Similar to the case in 2D \tfim, we may use a discrete path integral to turn the \Ztwo gauge theory \eqref{eq:standard-z2-theory} into a classical statistical model.
 With the presence of $H_h$, the $H_Z$ factor of each imaginary time step reads
 \[
     \begin{aligned}
@@ -492,11 +489,32 @@ where
     \tanh J_\tau = \ee^{-2 h \Delta \tau}.
 \end{equation}
 The last few steps all use the fact that $\sigma^z_l = \pm 1$.
-With the gauge $\sigma_{i, i+\hat{x}} = 1$, the weight 
+So we just need to simulate the ``classical \Ztwo gauge theory''
+\begin{equation}
+    H = - \Delta \tau J \sum_{\vb*{i}, \tau} \prod_{\vb*{l} \in \Box_{\vb*{i}^*}} \sigma_{\vb*{l}}(\tau) 
+    - J_\tau \sum_{\text{bond $\vb*{l}$}, \tau} \sigma_l^z(\tau) \sigma_l^z(\tau + \Delta \tau)
+    \label{eq:classical-z2-theory}
+\end{equation}
+at $T = 1$. \eqref{eq:classical-z2-theory} actually does not have a \Ztwo gauge symmetry, as it can be seen as a 2+1 dimensional \Ztwo theory in the path integral formalism with gauge choice
+\begin{equation}
+    \sigma_{\vb*{i}, \tau} = 1,
+\end{equation}
+shown in \prettyref{fig:temporal-gauge}.
+This fact actually explains in an intuitively way why \eqref{eq:gauge-choice-x} does not work:
+by introducing a transverse field (or string tension term), we have already done an implicit gauge fixing with the form $\sigma=\cdots$, and it is generally impossible to do another like \eqref{eq:gauge-choice-x}.
 
-\section{Monte Carlo Simulation of the Pure \Ztwo Gauge Theory with Gauge \eqref{eq:gauge-choice-x}}
+\begin{figure}
+    \centering
+    \input{lattice/temporal-gauge.tex}
+    \caption{The temporal gauge: the red and blue spin degrees of freedom can rotate arbitrarily, while the black ones (which are on bonds with temporal directions) are fixed to 1. }
+    \label{fig:temporal-gauge}
+\end{figure}
 
-\subsection{The Phase Diagram}
+\section{Simulation of \Ztwo Gauge Theory with Different Approaches}
+
+\subsection{Monte Carlo Simulation of the Pure \Ztwo Gauge Theory with Gauge \eqref{eq:gauge-choice-x}}
+
+\subsubsection{The Phase Diagram}
 
 \begin{figure}
     \centering
@@ -522,11 +540,11 @@ where Metropolis algorithm cannot update the system sufficiently when $h=0$,
 since in that case the 2D \cim corresponding to the 1D transverse field Ising chain degenerates into a classical 1D Ising chain due to the vanishing quantum fluctuation, 
 so the coupling strength in the temporal direction approaches to infinite.
 
-\section{Monte Carlo Simulation of the Pure \Ztwo Theory's Dual Transverse Field Ising Model}
+\subsection{Monte Carlo Simulation of the Pure \Ztwo Theory's Dual Transverse Field Ising Model}
 
-\subsection{Benchmark of the Algorithms}
+\subsubsection{Benchmark of the Algorithms}
 
-\subsubsection{Metropolis and Wolff update for \CIM}
+\paragraph{Metropolis and Wolff update for \CIM}
 
 \begin{figure}
     \centering
@@ -551,6 +569,22 @@ so the coupling strength in the temporal direction approaches to infinite.
 \end{figure}
 
 \section{Monte Carlo Simulation of \eqref{eq:proposed-model}}
+
+\subsection{The \Ztwo Gauge Theory}
+
+\begin{figure}
+    \centering
+    \input{lattice/gauge-sublattice.tex}
+    \caption{Dividing a gauge field configuration into two sublattices}
+    \label{fig:z2-dividing}
+\end{figure}
+
+\Ztwo gauge degrees of freedom are defined on bonds. 
+Suppose there are $N$ sites. Since there are 4 bonds connecting to one site and a bond is shared by two sites,
+there are $4 N / 2 = 2 N$ bonds.
+Therefore, the \Ztwo gauge degrees of freedom can be divided into two sublattices, each of which has $N$ degrees of freedom, shown in \prettyref{fig:z2-dividing}.
+
+\subsection{Fermions}
 
 The way to update fermions can be found in the appendix of \cite{Chen_2021}.
 

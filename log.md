@@ -93,4 +93,18 @@ After discussion with Yang Qi, we conclude that
 TODO:
 - read an article about QMC of $\mathbb{Z}_2$ gauge theory by Sachdev and others.
 
-# 2021.9.22
+# 2021.9.23
+
+Rename `z2-magnetization-wolff-from-ones.jl` into `z2-magnetization-wolff-from-ones-proto.jl`.
+
+Copy `z2-magnetization-wolff-from-ones-proto.jl` to `z2-magnetization-wolff-from-ones-compute.jl`.
+
+Create `run-z2.sh` under `3d-ising-prototype\examples\z2`.
+
+# 2021.9.24
+
+Modify `z2-magnetization-wolff-from-ones-compute.jl` to 
+- store magnetization data to a JLD file after the calculation
+- report the progress via a text file during the calculation
+
+Create `z2-direct-prototype` and `fermion-prototype`.
