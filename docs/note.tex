@@ -583,6 +583,15 @@ so the coupling strength in the temporal direction approaches to infinite.
 Suppose there are $N$ sites. Since there are 4 bonds connecting to one site and a bond is shared by two sites,
 there are $4 N / 2 = 2 N$ bonds.
 Therefore, the \Ztwo gauge degrees of freedom can be divided into two sublattices, each of which has $N$ degrees of freedom, shown in \prettyref{fig:z2-dividing}.
+Actually in order to be consistent with Julia's array indexing convention, we choose \prettyref{fig:z2-dividing-real} as our convention to label the \Ztwo gauge degrees of freedom.
+Note that the definition of A sublattice and B sublattice in \prettyref{fig:z2-dividing} is exactly opposite to the definition in \prettyref{fig:z2-dividing-real}.
+
+\begin{figure}
+    \centering
+    \input{lattice/gauge-sublattice-real.tex}
+    \caption{Another way to divide a gauge field configuration into two sublattices, in agreement with Julia's index convention, where \texttt{i} in \texttt{...[i, j]} means $x$ and \texttt{j} means $y$.}
+    \label{fig:z2-dividing-real}
+\end{figure}
 
 \subsection{Fermions}
 

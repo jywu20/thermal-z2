@@ -118,3 +118,11 @@ The diagrams generated and the output files are stored in `3d-ising-prototype\ex
 
 It is kind of surprising that there is a finite temperature phase transition. 
 What is going on??
+
+# 2021.9.25
+
+Add support for square lattices in `z2-direct-prototype/lattice.jl`.
+
+After several hours of work, I find that the code in `z2-direct-prototype` is already overengineered.
+
+I have to make some change.
