@@ -1,33 +1,95 @@
-struct DiscretePathIntegralZ2GaugeFieldConfiguration{L <: AbstractLattice, D, N}
+import Base.getindex
+import Base.setindex!
+
+#region field configuration for path integral of z2 gauge fields
+
+"""
+`L` is the lattice type and `D` is the data type of Z2 gauge degrees of freedom. 
+Indices of `data` are bond indices of `lattice`, or site indices of `bond_lattice(lattice)`.
+"""
+struct DiscretePathIntegralZ2GaugeField{L <: AbstractLattice, D}
+    n_steps::Int
     lattice::L
-    data::Array{D, N}
+    data::Array{D, 2}
 end
 
-getindex(z2field::DiscretePathIntegralZ2GaugeFieldConfiguration, idx...) = z2field.data[idx...]
-setindex!(z2field::DiscretePathIntegralZ2GaugeFieldConfiguration, value, idx) = z2field.data[idx...] = value
+getindex(z2field::DiscretePathIntegralZ2GaugeField, idx...) = z2field.data[idx...]
+getindex(z2field::DiscretePathIntegralZ2GaugeField, i::Int64, j::Int64, τ::Int64) = z2field.data[bond(z2field.lattice, i, j)..., τ]
+setindex!(z2field::DiscretePathIntegralZ2GaugeField, value, idx...) = z2field.data[idx...] = value
+setindex!(z2field::DiscretePathIntegralZ2GaugeField, value, i::Int64, j::Int64, τ::Int64) = z2field.data[bond(z2field.lattice, i, j)..., τ] = value
 
-const DiscretePathIntegralZ2GaugeFieldConfiguration2D{L <: AbstractLattice, D} = DiscretePathIntegralZ2GaugeFieldConfiguration{L, D, 3}
-
-function DiscretePathIntegralZ2GaugeFieldConfiguration2D(::Type{D}, lattice::L, n_steps::L) where {L <: AbstractLattice, D} 
-    n_side = length(sites(lattice))
-    DiscretePathIntegralZ2GaugeFieldConfiguration2D(lattice, Array{D, 3}(undef, n_side, n_side, n_steps))
+function all_ones_discrete_path_integral_z2_gauge_field(
+    ::Type{D}, lattice::L, n_steps::Int
+) where {D, L <: AbstractLattice}
+    n_sites = length(sites(bond_lattice(lattice)))
+    data = ones(D, n_sites, n_steps)
+    DiscretePathIntegralZ2GaugeField{L, D}(n_steps, lattice, data)
 end
 
-function flip!(z2field::DiscretePathIntegralZ2GaugeFieldConfiguration2D{L, D}, i::S) where {S, C, D, L <: AbstractLattice{S, C}}
-    z2field[i] *= -1
-end
+all_ones_discrete_path_integral_z2_gauge_field(lattice::L, n_steps::Int) where {L <: AbstractLattice} = 
+    all_ones_discrete_path_integral_z2_gauge_field(Int, lattice, n_steps)
 
-struct Z2GaugeFieldModel{F <: AbstractFloat}
-    J::F
-    h::F
-end
+const DiscretePathIntegralZ2GaugeFieldPeriodicSquare2D{D} = 
+    DiscretePathIntegralZ2GaugeField{PeriodicSquareLattice2DWithBonds, D}
 
-struct Z2GaugeFieldDiscretePathIntegralParams{N <: Integer, F <: AbstractFloat}
-    n_side::N
-    n_steps::N
+# function DiscretePathIntegralZ2GaugeFieldPeriodicSquare2D(::Type{D}, lattice::PeriodicSquareLattice2DWithBonds, n_steps::Int) where {D} 
+#     n_sites = length(sites(lattice))
+#     DiscretePathIntegralZ2GaugeFieldPeriodicSquare2D(lattice, Array{D, 2}(undef, n_sites, n_steps))
+# end
+
+#endregion
+
+#region the Z2 model: Metropolis algorithm
+
+struct Z2GaugeTheoryDiscretePathIntegralMetropolisParams{F <: AbstractFloat}
+    n_side::Int
+    n_steps::Int
     β::F
+    Δτ::F
+    Jxy::F
+    Jτ::F
 end
 
-function accept_rate(z2field::DiscretePathIntegralZ2GaugeFieldConfiguration2D, i)
-    z2field[i]
+function Z2GaugeTheoryDiscretePathIntegralMetropolisParams(J::F, h::F, n_side::Int, n_steps::Int, β::F) where {F <: AbstractFloat}
+    Δτ = β / n_steps
+    Z2GaugeTheoryDiscretePathIntegralMetropolisParams(n_side, n_steps, β, Δτ, Δτ * J, atanh.(exp.(- 2 * Δτ * h)))
 end
+
+function Δ_plaquatte_term(z2field::DiscretePathIntegralZ2GaugeFieldPeriodicSquare2D, b::Int, τ::Int)
+    lattice = z2field.lattice
+    - 2 * sum(map(p -> prod(map(x -> z2field[x, τ], p)), plaquatte_shared_bond(lattice, b)))
+end
+
+function Δ_temporal_correlation_term(z2field::DiscretePathIntegralZ2GaugeFieldPeriodicSquare2D, b::Int, τ::Int)
+    n_steps = z2field.n_steps
+    - 2 * z2field[b, τ] * (z2field[b, back_into_range(τ + 1, n_steps)] + z2field[b, back_into_range(τ - 1, n_steps)])
+end
+
+"""
+Metropolis accept rate.
+"""
+function accept_rate(z2field::DiscretePathIntegralZ2GaugeFieldPeriodicSquare2D, params::Z2GaugeTheoryDiscretePathIntegralMetropolisParams, b::Int, τ::Int)
+    Jxy = params.Jxy
+    Jτ = params.Jτ
+    exp(Jxy * Δ_plaquatte_term(z2field, b, τ) + Jτ * Δ_temporal_correlation_term(z2field, b, τ))
+end
+
+function sweep!(z2field::DiscretePathIntegralZ2GaugeFieldPeriodicSquare2D, params::Z2GaugeTheoryDiscretePathIntegralMetropolisParams, n_sweep::Int; observe = nothing)
+    results = []
+    bonds = sites(z2field.lattice)
+
+    for sweep_count in 1 : n_sweep
+        for τ in 1 : params.n_steps
+            for l in bonds
+                if rand() < accept_rate(z2field, params, l, τ)
+                    z2field[l, τ] *= -1 
+                end
+            end
+        end
+    end
+    if observe !== nothing
+        push!(results, observe(z2field))
+    end
+end
+
+#endregion

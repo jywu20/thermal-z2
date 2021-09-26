@@ -10,7 +10,7 @@ heatmap(h_range, Δτ_range, [(-log(tanh(Δτ * h)) / 2) / atanh(exp(- 2 * Δτ 
 ##
 
 Δτ = 0.01
-h_range = LinRange(0.0, 1.5, 40)
+h_range = LinRange(0.0, 500, 40)
 
 p = plot(h_range, atanh.(exp.(- 2 * Δτ * h_range)))
 plot!(p, h_range, -log.(tanh.(Δτ * h_range)) / 2)

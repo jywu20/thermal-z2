@@ -125,4 +125,4 @@ Add support for square lattices in `z2-direct-prototype/lattice.jl`.
 
 After several hours of work, I find that the code in `z2-direct-prototype` is already overengineered.
 
-I have to make some change.
+The current version of `z2-direct-prototype` is deprecated and is moved to `deprecated/2021-9-25`.
