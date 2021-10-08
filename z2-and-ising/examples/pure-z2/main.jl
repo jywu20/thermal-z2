@@ -1,6 +1,6 @@
 using ProgressMeter
 using Statistics
-include("lib.jl")
+include("../../src/lib.jl")
 
 ##
 

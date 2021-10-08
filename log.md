@@ -139,3 +139,4 @@ Changing the span of `T_range` and `h_range` in both `z2-direct-prototype` and `
 
 Rename a few files in `z2-direct-prototype`.
 Contents in the folder are then copied into a new folder `z2-and-ising`.
+`main.jl` is moved to `z2-and-ising/examples/pure-z2`.

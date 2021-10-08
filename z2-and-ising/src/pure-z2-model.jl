@@ -69,13 +69,22 @@ end
 """
 Metropolis accept rate.
 """
-function accept_rate(z2field::DiscretePathIntegralZ2GaugeFieldPeriodicSquare2D, params::Z2GaugeTheoryDiscretePathIntegralMetropolisParams, b::Int, τ::Int)
+function accept_rate(
+    z2field::DiscretePathIntegralZ2GaugeFieldPeriodicSquare2D, 
+    params::Z2GaugeTheoryDiscretePathIntegralMetropolisParams, 
+    b::Int, τ::Int
+)
     Jxy = params.Jxy
     Jτ = params.Jτ
     exp(Jxy * Δ_plaquatte_term(z2field, b, τ) + Jτ * Δ_temporal_correlation_term(z2field, b, τ))
 end
 
-function sweep!(z2field::DiscretePathIntegralZ2GaugeFieldPeriodicSquare2D, params::Z2GaugeTheoryDiscretePathIntegralMetropolisParams, n_sweep::Int; observe = nothing, observe_type::DataType = Any)
+function sweep!(
+    z2field::DiscretePathIntegralZ2GaugeFieldPeriodicSquare2D, 
+    params::Z2GaugeTheoryDiscretePathIntegralMetropolisParams, 
+    n_sweep::Int; 
+    observe = nothing, observe_type::DataType = Any
+)    
     results = observe_type[]
     lattice_bonds = bonds(z2field.lattice)
 
