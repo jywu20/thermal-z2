@@ -1,3 +1,3 @@
 include("utils.jl")
 include("lattice.jl")
-include("model.jl")
+include("pure-z2-model.jl")

@@ -134,3 +134,8 @@ The current pure Z2 gauge theory simulation is performed and the results are sto
 It can be seen that with very small $h$ the update is not fast enough; also the temperature range is larger than needed.
 
 Trying more detailed computation.
+
+Changing the span of `T_range` and `h_range` in both `z2-direct-prototype` and `3d-ising-prototype\examples\z2` into smaller values.
+
+Rename a few files in `z2-direct-prototype`.
+Contents in the folder are then copied into a new folder `z2-and-ising`.

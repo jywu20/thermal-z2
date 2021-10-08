@@ -13,8 +13,7 @@ h_range = LinRange(0.1, 4.1, h_steps)
 ##
 
 # Since we are going to run the program by `julia main.jl`, the working directory can be set to "./"
-# working_path = "D:\\Projects\\thermal-z2\\z2-direct-prototype\\2021-10-8\\" 
-working_path = "./"
+working_path = "D:\\Projects\\thermal-z2\\z2-direct-prototype\\2021-10-8-run-1\\" 
 output_text_name = "output-2021-10-8"
 mag = open(working_path * output_text_name) do file
     mag_str = readlines(file)[6:end]
