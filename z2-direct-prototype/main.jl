@@ -17,7 +17,7 @@ J = 1.0
 T_steps = 80
 T_range = LinRange(0.1, 4.1, T_steps)
 h_steps = 80
-h_range = LinRange(0.1, 3.1, h_steps)
+h_range = LinRange(0.2, 3.1, h_steps)
 
 # We are going to run the program by `julia main.jl`
 # working_directory = "D:\\Projects\\thermal-z2\\z2-direct-prototype\\"

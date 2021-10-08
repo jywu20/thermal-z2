@@ -140,3 +140,7 @@ Changing the span of `T_range` and `h_range` in both `z2-direct-prototype` and `
 Rename a few files in `z2-direct-prototype`.
 Contents in the folder are then copied into a new folder `z2-and-ising`.
 `main.jl` is moved to `z2-and-ising/examples/pure-z2`.
+
+Another batch of data is retrieved and stored in `z2-direct-prototype\2021-10-8-run-2`.
+
+Another batch of data is retrieved and stored in `3d-ising-prototype\examples\z2\2021-10-9`.
