@@ -126,3 +126,11 @@ Add support for square lattices in `z2-direct-prototype/lattice.jl`.
 After several hours of work, I find that the code in `z2-direct-prototype` is already overengineered.
 
 The current version of `z2-direct-prototype` is deprecated and is moved to `deprecated/2021-9-25`.
+
+# 2021.10.8
+
+The current pure Z2 gauge theory simulation is performed and the results are stored in `z2-direct-prototype\2021-10-8-run-1`.
+
+It can be seen that with very small $h$ the update is not fast enough; also the temperature range is larger than needed.
+
+Trying more detailed computation.

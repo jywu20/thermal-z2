@@ -55,6 +55,12 @@ function Z2GaugeTheoryDiscretePathIntegralMetropolisParams(J::F, h::F, n_side::I
     Z2GaugeTheoryDiscretePathIntegralMetropolisParams(n_side, n_steps, β, Δτ, Δτ * J, atanh.(exp.(- 2 * Δτ * h)))
 end
 
+plaquatte_op(z2field::DiscretePathIntegralZ2GaugeFieldPeriodicSquare2D, i::Int, τ::Int) = 
+    prod(map(x -> z2field[x, τ], plaquatte(z2field.lattice, i)))
+
+flux_average(z2field::DiscretePathIntegralZ2GaugeFieldPeriodicSquare2D, τ::Int) = 
+    mean(map(x -> plaquatte_op(z2field, x, τ), sites(z2field.lattice)))
+
 function Δ_plaquatte_term(z2field::DiscretePathIntegralZ2GaugeFieldPeriodicSquare2D, b::Int, τ::Int)
     lattice = z2field.lattice
     - 2 * sum(map(p -> prod(map(x -> z2field[x, τ], p)), plaquatte_shared_bond(lattice, b)))
@@ -74,13 +80,13 @@ function accept_rate(z2field::DiscretePathIntegralZ2GaugeFieldPeriodicSquare2D, 
     exp(Jxy * Δ_plaquatte_term(z2field, b, τ) + Jτ * Δ_temporal_correlation_term(z2field, b, τ))
 end
 
-function sweep!(z2field::DiscretePathIntegralZ2GaugeFieldPeriodicSquare2D, params::Z2GaugeTheoryDiscretePathIntegralMetropolisParams, n_sweep::Int; observe = nothing)
-    results = []
-    bonds = sites(z2field.lattice)
+function sweep!(z2field::DiscretePathIntegralZ2GaugeFieldPeriodicSquare2D, params::Z2GaugeTheoryDiscretePathIntegralMetropolisParams, n_sweep::Int; observe = nothing, observe_type::DataType = Any)
+    results = observe_type[]
+    lattice_bonds = bonds(z2field.lattice)
 
-    for sweep_count in 1 : n_sweep
+    for _ in 1 : n_sweep
         for τ in 1 : params.n_steps
-            for l in bonds
+            for l in lattice_bonds
                 if rand() < accept_rate(z2field, params, l, τ)
                     z2field[l, τ] *= -1 
                 end
@@ -90,6 +96,8 @@ function sweep!(z2field::DiscretePathIntegralZ2GaugeFieldPeriodicSquare2D, param
     if observe !== nothing
         push!(results, observe(z2field))
     end
+
+    results
 end
 
 #endregion
