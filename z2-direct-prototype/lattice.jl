@@ -1,3 +1,10 @@
+# Note by the author: the architecture in this file now seems awkward and clumsy.
+# My mind when I was writing down these codes was soaked in classical OOP patterns, and 
+# the relationships between CenteredSquareLattice2D, SquareLattice2D and so on are quite
+# like the inheritance hierarchy. 
+# This is actually not the best way to do things in Julia.
+# A much better way is to use closures to store things like site list, bond list, etc.
+
 #region abstract definitions.
 
 abstract type AbstractLattice{SiteType, CoorType} end
@@ -34,6 +41,10 @@ bond_lattice(lattice::L) where {S, C, L <: AbstractLattice{S, C}} = @error "The 
 
 plaquatte(lattice::L, site::S) where {S, C, L <: AbstractLattice{S, C}} = @error "Plaquatte on $site not defined for lattice type $L."
 
+plaquattes(lattice::L) where {S, C, L <: AbstractLattice{S, C}} = @error "Plaquattes not defined for lattice type $L."
+
+n_side(lattice::L) where L <: AbstractLattice = @error "No well defined side length for lattice type $L."
+
 #endregion
 
 #region Square lattices.
@@ -58,6 +69,8 @@ function SquareLattice2D(n_side::Int)::SquareLattice2D
     end
     SquareLattice2D(n_side, site_list, inverse_list)
 end
+
+n_side(lattice::SquareLattice2D) = lattice.n_side
 
 sites(lattice::SquareLattice2D) = 1 : lattice.n_side^2
 
@@ -174,6 +187,8 @@ site_y_backward_move(lattice::PeriodicSquareLattice2D, site::Int)::Int = nearest
 
 sites(lattice::PeriodicSquareLattice2D) = sites(lattice.lattice)
 
+n_side(lattice::PeriodicSquareLattice2D) = n_side(lattice.lattice)
+
 #endregion
 
 #region square lattice with bonds defined as a dual centered square lattice.
@@ -218,6 +233,8 @@ end
 
 sites(lattice::PeriodicSquareLattice2DWithBonds) = sites(lattice.lattice)
 
+n_side(lattice::PeriodicSquareLattice2DWithBonds) = n_side(lattice.lattice)
+
 bond(lattice::PeriodicSquareLattice2DWithBonds, i::Int, j::Int) = lattice.bond_to_dual_site[i, j]
 
 bonds(lattice::PeriodicSquareLattice2DWithBonds) = sites(lattice.bonds_dual_lattice)
@@ -230,6 +247,10 @@ site_x_forward_move(lattice::PeriodicSquareLattice2DWithBonds, site::Int)::Int =
 site_x_backward_move(lattice::PeriodicSquareLattice2DWithBonds, site::Int)::Int = site_x_backward_move(lattice.lattice, site)
 site_y_forward_move(lattice::PeriodicSquareLattice2DWithBonds, site::Int)::Int = site_y_forward_move(lattice.lattice, site)
 site_y_backward_move(lattice::PeriodicSquareLattice2DWithBonds, site::Int)::Int = site_y_backward_move(lattice.lattice, site)
+
+function plaquattes(lattice::PeriodicSquareLattice2DWithBonds)
+    sites(lattice)
+end
 
 function plaquatte(lattice::PeriodicSquareLattice2DWithBonds, i::Int)
     nn_i = nearest_neighbors(lattice, i)

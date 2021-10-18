@@ -144,3 +144,7 @@ Contents in the folder are then copied into a new folder `z2-and-ising`.
 Another batch of data is retrieved and stored in `z2-direct-prototype\2021-10-8-run-2`.
 
 Another batch of data is retrieved and stored in `3d-ising-prototype\examples\z2\2021-10-9`.
+
+# 2021.10.14
+
+`fermion-prototype` is deprecated.

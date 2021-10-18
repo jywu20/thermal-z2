@@ -1,5 +1,8 @@
 import Base.getindex
 import Base.setindex!
+import Base.copy
+import Base.+
+import Base.-
 
 #region field configuration for path integral of z2 gauge fields
 
@@ -17,6 +20,10 @@ getindex(z2field::DiscretePathIntegralZ2GaugeField, idx...) = z2field.data[idx..
 getindex(z2field::DiscretePathIntegralZ2GaugeField, i::Int64, j::Int64, τ::Int64) = z2field.data[bond(z2field.lattice, i, j)..., τ]
 setindex!(z2field::DiscretePathIntegralZ2GaugeField, value, idx...) = z2field.data[idx...] = value
 setindex!(z2field::DiscretePathIntegralZ2GaugeField, value, i::Int64, j::Int64, τ::Int64) = z2field.data[bond(z2field.lattice, i, j)..., τ] = value
+
+copy(z2field::DiscretePathIntegralZ2GaugeField) = DiscretePathIntegralZ2GaugeField(z2field.n_steps, z2field.lattice, copy(z2field.data))
+# +(σ1::DiscretePathIntegralZ2GaugeField, σ2::DiscretePathIntegralZ2GaugeField) = σ1.data + σ2.data
+# -(σ1::DiscretePathIntegralZ2GaugeField, σ2::DiscretePathIntegralZ2GaugeField) = σ1.data - σ2.data
 
 function all_ones_discrete_path_integral_z2_gauge_field(
     ::Type{D}, lattice::L, n_steps::Int
