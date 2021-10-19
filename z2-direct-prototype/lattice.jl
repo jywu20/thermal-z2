@@ -39,6 +39,8 @@ bonds(lattice::L) where {S, C, L <: AbstractLattice{S, C}} = @error "Bond list n
 
 bond_lattice(lattice::L) where {S, C, L <: AbstractLattice{S, C}} = @error "The lattice constructed by bonds not defined for lattice type $L."
 
+bond_to_sites(lattice::L, b) where L <: AbstractLattice = @error "The two sites attached to bond $b not defined for lattice type $L."
+
 plaquatte(lattice::L, site::S) where {S, C, L <: AbstractLattice{S, C}} = @error "Plaquatte on $site not defined for lattice type $L."
 
 plaquattes(lattice::L) where {S, C, L <: AbstractLattice{S, C}} = @error "Plaquattes not defined for lattice type $L."
@@ -75,17 +77,17 @@ n_side(lattice::SquareLattice2D) = lattice.n_side
 sites(lattice::SquareLattice2D) = 1 : lattice.n_side^2
 
 function site_to_coord(n_side::Int, i::Int)::Tuple{Int, Int}
-    y = i % n_side
-    if y == 0
-        y = n_side
+    x = i % n_side
+    if x == 0
+        x = n_side
     end
-    x = 1 + Int((i - y) / n_side)
+    y = 1 + Int((i - x) / n_side)
     
     (x, y)
 end
 
 function coord_to_site(n_side::Int, x::Int, y::Int)::Int
-    (x - 1) * n_side + y
+    (y - 1) * n_side + x 
 end
 
 function site_to_coord(lattice::SquareLattice2D, site::Int)::Tuple{Int, Int}
@@ -153,6 +155,8 @@ function PeriodicSquareLattice2D(n_side::Int)::PeriodicSquareLattice2D
     end
     PeriodicSquareLattice2D(lattice, nn_list)
 end
+
+coord_to_site(lattice::PeriodicSquareLattice2D, coord::Tuple{Int, Int}) = coord_to_site(lattice.lattice, coord)
 
 function nearest_neighbors(n_side::Int, i::Int)::Tuple{Int, Int, Int, Int}
     x, y = site_to_coord(n_side, i)
@@ -233,6 +237,8 @@ end
 
 sites(lattice::PeriodicSquareLattice2DWithBonds) = sites(lattice.lattice)
 
+coord_to_site(lattice::PeriodicSquareLattice2DWithBonds, coord::Tuple{Int, Int}) = coord_to_site(lattice.lattice, coord)
+
 n_side(lattice::PeriodicSquareLattice2DWithBonds) = n_side(lattice.lattice)
 
 bond(lattice::PeriodicSquareLattice2DWithBonds, i::Int, j::Int) = lattice.bond_to_dual_site[i, j]
@@ -240,6 +246,17 @@ bond(lattice::PeriodicSquareLattice2DWithBonds, i::Int, j::Int) = lattice.bond_t
 bonds(lattice::PeriodicSquareLattice2DWithBonds) = sites(lattice.bonds_dual_lattice)
 
 bond_lattice(lattice::PeriodicSquareLattice2DWithBonds) = lattice.bonds_dual_lattice
+
+function bond_to_sites(lattice::PeriodicSquareLattice2DWithBonds, b::Int)
+    this_bond_lattice = bond_lattice(lattice)
+    this_n_side = n_side(lattice)
+    x, y, t = site_to_coord(this_bond_lattice, b)
+    start_point = coord_to_site(lattice, (x, y))
+    if t == A
+        return start_point, coord_to_site(lattice, (x, back_into_range(y + 1, this_n_side)))
+    end
+    start_point, coord_to_site(lattice, (back_into_range(x + 1, this_n_side), y))
+end
 
 nearest_neighbors(lattice::PeriodicSquareLattice2DWithBonds, i::Int) = nearest_neighbors(lattice.lattice, i)
 

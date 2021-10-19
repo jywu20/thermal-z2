@@ -508,6 +508,23 @@ by introducing a transverse field (or string tension term), we have already done
     \label{fig:temporal-gauge}
 \end{figure}
 
+\section{Some details of the program}
+
+\subsection{The lattice}
+
+\begin{figure}
+    \input{lattice/lattice-representation.tex}
+    \caption{How the lattice is represented in the program. 
+    The black numbers placed on sites are the indices of the sites.
+    The red and blue numbers placed on bonds are the indices of the bonds. The bonds form a centered square lattice, and the red numbers correspond to bonds in the A sublattice, the blue numbers the B sublattice.
+    The grey numbers placed on the center of each plaquette is the index of the plaquette.
+    All plaquettes form a dual lattice, the shape and size of which is exact the same as the lattice shown in the figure.
+    A plaquette shares its index with the top left site, which agrees with \prettyref{fig:z2-gauge-field} (note that the two figures' coordinate systems differ in a rotation).}
+    \label{fig:label-representation}
+\end{figure}
+
+How 
+
 \section{Simulation of \Ztwo gauge theory with different approaches}
 
 \subsection{Monte Carlo simulation of the pure \Ztwo gauge theory with gauge \eqref{eq:gauge-choice-x}}

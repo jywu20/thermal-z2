@@ -38,10 +38,29 @@ function checkboard_decomposition(lattice::PeriodicSquareLattice2DWithBonds)
     (sub_A, sub_B)
 end
 
-function plaquatte_hamiltonian(lattice::PeriodicSquareLattice2DWithBonds, p::Int)
-    plaquatte(lattice, p)    # TODO
+function plaquatte_hamiltonian(z2field::DiscretePathIntegralZ2GaugeFieldPeriodicSquare2D, p::Int, τ::Int)
+    lattice = z2field.lattice
+    lattice_n_sites = length(sites(lattice))
+    result = zeros(lattice_n_sites, lattice_n_sites)
+    for b in plaquatte(lattice, p)
+        result += Tij(lattice_n_sites, bond_to_sites(lattice, b)...) * z2field[b, τ]
+    end
+    result 
 end
 
-function checkboard_decomposition_hamiltonians(lattice::PeriodicSquareLattice2DWithBonds)
-    # TODO
+function checkboard_decomposition_hamiltonians(
+    lattice::PeriodicSquareLattice2DWithBonds, 
+    σ::DiscretePathIntegralZ2GaugeFieldPeriodicSquare2D, 
+τ::Int)
+    sub_A, sub_B = checkboard_decomposition(lattice)
+    sum([plaquatte_hamiltonian(σ, p, τ) for p in sub_A]), sum([plaquatte_hamiltonian(σ, p, τ) for p in sub_B])
+end
+
+function checkboard_decomposition_bonds(lattice::PeriodicSquareLattice2DWithBonds)
+    sub_A, sub_B = checkboard_decomposition(lattice)
+    map(y -> collect(flatten(map(x -> plaquatte(lattice, x), y))), (sub_A, sub_B))
+end
+
+function Δ_B_σ(σ::DiscretePathIntegralZ2GaugeFieldPeriodicSquare2D, b::Int, τ::Int)
+    
 end

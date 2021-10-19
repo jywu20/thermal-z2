@@ -148,3 +148,15 @@ Another batch of data is retrieved and stored in `3d-ising-prototype\examples\z2
 # 2021.10.14
 
 `fermion-prototype` is deprecated.
+
+# 2021.10.18
+
+Try to simplify the lattice definition, and make `site_list` and `inverse_list` compatible with Julia's built-in arrays.
+
+`z2-direct-prototype\lattice.jl` is modified.
+
+`z2-direct-prototype\dev\test-tight-binding.jl` now contains some scratch about Trotter decomposed kinetic time evolution operators.
+
+# 2021.10.19
+
+Add `docs\lattice\lattice-representation.tex` which illustrate how the lattice is represented in the program.
