@@ -73,8 +73,15 @@
 }
 
 \newcommand*{\Ztwo}{$\mathbb{Z}_2$ }
-\newcommand*{\tfim}{transverse field Ising model }
-\newcommand*{\cim}{classical Ising model }
+\newcommand*{\tfim}{transverse field Ising model}
+\newcommand*{\cim}{classical Ising model}
+
+% Disable unsupported commands in bookmark titles 
+\pdfstringdefDisableCommands{%
+  \def\\{}%
+  \def\texttt#1{<#1>}%
+  \def\mathbb#1{#1}%
+}
 
 \title{\Ztwo Gauge Field Coupled to a Fermion System}
 \author{Jinyuan Wu}
@@ -100,6 +107,14 @@ where
 where $\vb*{i}^*$ is a site in the dual lattice (i.e. a site placed at the center of a plaquette), 
 $\Box_{\vb*{i}^*}$ is the plaquette whose center is $\vb*{i}^*$, and $\vb*{l}$ denotes a certain bond of a plaquette.
 Such kind of model Hamiltonian usually emerges from orthogonal metals \cite{moon2019deconfined, orthogonal_metal}.
+
+The author of \cite{moon2019deconfined} claims that 
+\begin{itemize}
+    \item The model \eqref{eq:proposed-model} shows ``deconfined \emph{thermal} phase transitions with \Ztwo structures''. 
+    \item The mechanism for a thermal phase transition in a \Ztwo theory is that deconfined fermions coupled to the \Ztwo gauge field introduces effective interaction between \Ztwo charges.
+    \item % TODO
+\end{itemize}
+We think the author's argument is flawed; yet the model is still interesting and is worth some investigation.
 
 In this section, we introduce every part of \eqref{eq:proposed-model}.
 
@@ -193,14 +208,15 @@ so the model is actually a bundle of 1D Ising spin chain.
     \caption{Converting a \Ztwo gauge field theory into a bundle of Ising chains. There is no interaction between parallel Ising chains.}
 \end{figure}
 
-\subsubsection{Mapping a \Ztwo gauge theory into a 2D \tfim}
+\subsubsection{Mapping a \Ztwo gauge theory into a 2D \tfim{}}
 
 \begin{equation}
     H = - h \sum_{\pair{\vb*{I}, \vb*{J}}} \tau^z_{\vb*{I}} \tau^z_{\vb*{J}} - J \sum_{\vb*{I}} \tau^x_{\vb*{I}}.
     \label{eq:z2-dual-theory}
 \end{equation}
 
-\eqref{eq:z2-dual-theory} is often called the \concept{dual \tfim} of \Ztwo gauge theory \eqref{eq:standard-z2-theory}.
+\eqref{eq:z2-dual-theory} is often called the \concept{dual \tfim{}} of \Ztwo gauge theory \eqref{eq:standard-z2-theory}.
+The model \eqref{eq:standard-z2-theory}, therefore, is often called the \concept{Ising gauge theory}.
 
 \subsubsection{Absence of a finite temperature deconfined phase}\label{sec:absence-of-z2-deconfined-phase}
 
@@ -215,6 +231,7 @@ The fact that Wegner model is dual to a bundle of 1D Ising chain and therefore l
     \centering
     \input{phase/no-deconfined.tex}
     \caption{No deconfined phase when $T > 0$: if there is a deconfined phase when $T > 0$, there must be a thermal phase transition at the $h=0$ line, which is forbidden by the fact that a classical 1D Ising chain does not show thermal phase transitions.}
+    \label{fig:phase-diagram-expected-pure-z2}
 \end{figure}
 
 Here the terminology may cause confusion: we do not actually know if the "finite temperature deconfined" phase shares behavior with the standard zero temperature deconfined phase in Wegner model, and the "confined" phase in the high temperature condition is not caused by a strong transverse field which coerces all $\sigma$ degrees of freedom into $\rightarrow$ or $\leftarrow$, but rather, by thermal fluctuation that erases all information of \Ztwo excitations.
@@ -278,7 +295,7 @@ Nonetheless, note that orthogonal metals are generated in a strongly correlated 
 In this case, the confined phase is just an ordinary metal, with gapless fermions (electrons).
 At high temperature \Ztwo excitations are confined (in the sense defined in \prettyref{sec:absence-of-z2-deconfined-phase}), so \eqref{eq:proposed-model} is just an ordinary metal.
 
-\section{Principles of Monte Carlo simulation: path integral, fermions and more}
+\section{Principles of Monte Carlo simulation for degrees of freedom in \eqref{eq:proposed-model}}
 
 We are going to study \eqref{eq:proposed-model} numerically.
 In the partition function, the (non-normalized) weight of a configuration is $\mel{n}{\ee^{-\beta H}}{n}$, given that $\{\ket{n}\}$ is a basis.
@@ -297,9 +314,27 @@ The weight of a configuration is
 where $\sigma = \{\sigma_{\vb*{i} \vb*{j}}(\tau)\}$ and $s = \{s_{\vb*{i}}(\tau)\}$, 
 and in the last line values of $\sigma(\tau)$ replaces the $\sigma^z$ operators in $H_\text{Ising}$.
 
-\subsection{Path integral for 2D \tfim}
+\subsection{The 2D \tfim{}}
 
-\subsubsection{From 2D \tfim to 3D \cim}
+\subsubsection{From 2D \tfim{} to 3D \cim: discrete path integral and Metropolis update}
+
+% TODO: the figures used in the following figure are wrong.
+\begin{figure}
+    \centering
+    \begin{subfigure}{0.48\textwidth}
+        \includegraphics[width=\textwidth]{montecarlo/ratio-h=1.PNG}
+        \subcaption{$h = 1$}
+    \end{subfigure}
+    \begin{subfigure}{0.48\textwidth}
+        \includegraphics[width=\textwidth]{montecarlo/ratio-h=4.PNG}
+        \subcaption{$h = 4$}
+    \end{subfigure}
+    \caption{$J_{xy} / J_\tau$ under different $h$. 
+    It can be seen that \eqref{eq:cim-from-tfim} is highly anisotropic for a large range of $J$.
+    Contour lines in (a) are straight, indicating that the discrete path integral works well even with large $\Delta \tau$, 
+    while contour lines in (b) are distorted, requiring us to use $\Delta \tau$ that is small enough.}
+    \label{fig:jxy-jtau-ratio}
+\end{figure}
 
 In this section we use $\sigma$ to denote spin-$1/2$ degrees of freedom in a 2D \tfim.
 This notation conflicts with the symbol $\sigma$ for \Ztwo gauge field, 
@@ -307,11 +342,14 @@ and is inconsistent with the symbol $s$ for the Ising field,
 but since we do not deal with the complete \eqref{eq:proposed-model} it does not matter.
 We also let $\sigma^z = \{\sigma^z_{\vb*{i}}(\tau)\}$ be the field configuration at $\tau$.
 
-The \tfim is 
+The \tfim{} is 
 \begin{equation}
     H_\text{TFIM} = - J \sum_{\pair{\vb*{i}, \vb*{j}}} \sigma^z_{\vb*{i}} \sigma^z_{\vb*{j}} + h \sum_{\vb*{i}} \sigma^x_{\vb*{i}}.
     \label{eq:tfim-hamiltonian}
 \end{equation}
+We know that a two dimensional quantum statistical model corresponds to a three dimensional classical statistical model, which is because a quantum statistical model can have quantum fluctuation and therefore imaginary time evolution, adding one imaginary time dimension.
+It is, therefore, a wise idea to write down the discrete path integral formulation of \eqref{eq:tfim-hamiltonian}, and use the Metropolis algorithm to simulate the discrete path integral, which is a 2+1 dimensional model.
+
 An imaginary time step in the path integral of \eqref{eq:tfim-hamiltonian} is 
 
 \[
@@ -347,24 +385,6 @@ at $T = 1$, where
     J_{xy} = \Delta \tau J, \quad \tanh J_\tau = \ee^{2 \Delta \tau h}.
 \end{equation}
 
-% TODO: the figures used in the following figure are wrong.
-\begin{figure}
-    \centering
-    \begin{subfigure}{0.48\textwidth}
-        \includegraphics[width=\textwidth]{montecarlo/ratio-h=1.PNG}
-        \subcaption{$h = 1$}
-    \end{subfigure}
-    \begin{subfigure}{0.48\textwidth}
-        \includegraphics[width=\textwidth]{montecarlo/ratio-h=4.PNG}
-        \subcaption{$h = 4$}
-    \end{subfigure}
-    \caption{$J_{xy} / J_\tau$ under different $h$. 
-    It can be seen that \eqref{eq:cim-from-tfim} is highly anisotropic for a large range of $J$.
-    Contour lines in (a) are straight, indicating that the discrete path integral works well even with large $\Delta \tau$, 
-    while contour lines in (b) are distorted, requiring us to use $\Delta \tau$ that is small enough.}
-    \label{fig:jxy-jtau-ratio}
-\end{figure}
-
 It should be noted that \eqref{eq:cim-from-tfim} may be highly anisotropic between time and space, 
 which can be observed in \prettyref{fig:jxy-jtau-ratio}.
 Another fact that can be read from \prettyref{fig:jxy-jtau-ratio} is that for large $h$ $\Delta \tau$ should be smaller to keep the same accuracy.
@@ -377,9 +397,9 @@ The anisotropic feature of \eqref{eq:cim-from-tfim} is tackled in \cite{Blte2002
 
 We did a benchmark of our algorithm with data provided in \cite{Friedman_1978}.
 
-\subsubsection{Worm algorithm for 2D \tfim}
+\subsubsection{Worm algorithm for 2D \tfim{}}
 
-Another way to simulate 2D \tfim is described in \cite{Huang_2020}.
+Another way to simulate 2D \tfim{} is described in \cite{Huang_2020}.
 We do the following (canonical) substitution
 \begin{equation}
     \sigma_{\vb*{i}}^x \longrightarrow - \sigma^z_{\vb*{i}}, \quad \sigma_{\vb*{i}}^z \longrightarrow - \sigma^x_{\vb*{i}}, \quad \sigma^y_{\vb*{i}} \longrightarrow - \sigma^y_{\vb*{i}}
@@ -437,7 +457,7 @@ We name the $\sigma^+ \sigma^+ + \text{h.c.}$ terms as \concept{pairing}, the $\
 \begin{figure}
     \centering
     \input{lattice/worldline.tex}
-    \caption{World lines of magnons in a \tfim model, under the periodic boundary condition. Note that a loop can go across the boundary.}
+    \caption{World lines of magnons in a \tfim{} model, under the periodic boundary condition. Note that a loop can go across the boundary.}
     \label{fig:tfim-worldline}
 \end{figure}
 
@@ -453,11 +473,13 @@ The weight of a field configuration with $N_\text{p}$ pairing fragments and $N_\
     \mel{\sigma_0}{\ee^{-\Delta \tau H}}{\sigma_\beta} \cdots \mel{\sigma_{2\Delta \tau}}{\ee^{-\Delta \tau H}}{\sigma_{\Delta \tau}} \mel{\sigma_{\Delta \tau}}{\ee^{-\Delta \tau H}}{\sigma_{0}} = 
 \]
 
-\subsection{Simulating \Ztwo gauge theory as it is}
+\subsection{The \Ztwo gauge theory}
 
-\subsubsection{Discrete path integral of \Ztwo guage theory}
+\subsubsection{Dual transverse Ising model}
 
-Similar to the case in 2D \tfim, we may use a discrete path integral to turn the \Ztwo gauge theory \eqref{eq:standard-z2-theory} into a classical statistical model.
+\subsubsection{Simulating \Ztwo gauge theory as it is: discrete path integral of \Ztwo guage theory}
+
+Similar to the case in 2D \tfim{}, we may use a discrete path integral to turn the \Ztwo gauge theory \eqref{eq:standard-z2-theory} into a classical statistical model.
 With the presence of $H_h$, the $H_Z$ factor of each imaginary time step reads
 \[
     \begin{aligned}
@@ -508,6 +530,8 @@ by introducing a transverse field (or string tension term), we have already done
     \label{fig:temporal-gauge}
 \end{figure}
 
+\subsection{Fermion coupling}
+
 \section{Some details of the program}
 
 \subsection{The lattice}
@@ -517,19 +541,76 @@ by introducing a transverse field (or string tension term), we have already done
     \caption{How the lattice is represented in the program. 
     The black numbers placed on sites are the indices of the sites.
     The red and blue numbers placed on bonds are the indices of the bonds. The bonds form a centered square lattice, and the red numbers correspond to bonds in the A sublattice, the blue numbers the B sublattice.
-    The grey numbers placed on the center of each plaquette is the index of the plaquette.
-    All plaquettes form a dual lattice, the shape and size of which is exact the same as the lattice shown in the figure.
-    A plaquette shares its index with the top left site, which agrees with \prettyref{fig:z2-gauge-field} (note that the two figures' coordinate systems differ in a rotation).}
+    The grey numbers placed on the center of each plaquette is the index of the plaquette.}
     \label{fig:label-representation}
 \end{figure}
 
-How 
+How the lattice is represented in our program can be found in \prettyref{fig:label-representation}.
+We assign one index to each sites in the 2D periodic lattice.
+The index agrees with the default column-major order in Julia arrays, if we regard $x$ as the first index and $y$ as the second index of an array, and regard the sites in the lattice as the placeholders of elements in a stringified matrix.
+
+The bonds of the lattice themselves form another lattice, which is a centered square lattice.
+
+The fact that the lattice is periodic is reflected by the fact that, for example, there is a bond between site 4 and site 1, indexed as 20, the coordinate of which in the lattice formed by bonds is $(4, \text{B})$ or $(4, 1, \text{B})$.
+Note that in the expression $(4, 1, \text{B})$, $1$ is the $y$ coordinate instead of the label of site 1.
+
+All plaquettes form a dual lattice, the shape and size of which is exact the same as the lattice shown in the figure.
+A plaquette shares its index with the top left site, 
+which agrees with \prettyref{fig:z2-gauge-field} (note that the two figures' coordinate systems differ in a rotation).
+
+The bonds can be enumerated using a trick called the \emph{check-board decomposition}, 
+where half of the plaquettes are picked out
+(in \prettyref{fig:label-representation} these plaquettes are painted in green and yellow), 
+the bonds of which are disjoint with each other.
+For example, plaquette~1 has four bonds, namely bond~1, bond~2, bond~17 and bond~21.
+These bonds will not be seen in any other bonds colored as green or yellow.
+On the other hand, if we have $N$ sites, the number of selected plaquettes is $N/2$, 
+and hence the number of bonds attached to the selected plaquettes is $N/2 \times 4$, which is exactly the number of all bonds.
+The check-board decomposition is useful because it can be noted that if a part of the Hamiltonian is defined as the sum of some operators defined on plaquettes, 
+then operators defined on the green plaquettes commute with each other, and so do the operators defined on yellow plaquettes.
+An operator defined on the green plaquette does not necessarily commute with an operator defined on the yellow plaquette,
+so we have 
+\begin{equation}
+    \begin{aligned}
+        \ee^{-\Delta \tau \sum_{\Box_{\vb*{i}}} O_{\vb*{i}}} &\approx \ee^{- \Delta \tau \sum_{\Box_{\vb*{i}} \in \mathrm{fam}_1} O_{\vb*{i}}} \ee^{- \Delta \tau \tau \sum_{\Box_{\vb*{i}} \in \mathrm{fam}_2} O_{\vb*{i}}}  \\
+        &= \prod_{\Box_{\vb*{i}} \in \mathrm{fam}_1} \ee^{- \Delta \tau O_{\vb*{i}}} \prod_{\Box_{\vb*{i}} \ee^{- \Delta \tau \tau \in \mathrm{fam}_2} O_{\vb*{i}}} \ee^{- \Delta \tau O_{\vb*{i}}}.
+    \end{aligned}
+\end{equation}
+There is still Trotter error, but it only comes from the first step, and as long as $\Delta \tau$ is small enough to make the first equation a reasonable approximation, we can move multiplicative factors in the second equation without introducing additional error.
+The check-board decomposition, therefore, is a useful method to reduce the Trotter error without having to accept a too small $\Delta \tau$.
+
+\subsection{Storage of the \Ztwo gauge field}
+
+\begin{figure}
+    \centering
+    \input{lattice/gauge-sublattice.tex}
+    \caption{Dividing a gauge field configuration into two sublattices}
+    \label{fig:z2-dividing}
+\end{figure}
+
+\Ztwo gauge degrees of freedom are defined on bonds. 
+Suppose there are $N$ sites. Since there are 4 bonds connecting to one site and a bond is shared by two sites,
+there are $4 N / 2 = 2 N$ bonds.
+Therefore, the \Ztwo gauge degrees of freedom can be divided into two sublattices, each of which has $N$ degrees of freedom, shown in \prettyref{fig:z2-dividing}.
+Actually in order to be consistent with Julia's array indexing convention, we choose \prettyref{fig:z2-dividing-real} as our convention to label the \Ztwo gauge degrees of freedom.
+Note that the definition of A sublattice and B sublattice in \prettyref{fig:z2-dividing} is exactly opposite to the definition in \prettyref{fig:z2-dividing-real}.
+
+\begin{figure}
+    \centering
+    \input{lattice/gauge-sublattice-real.tex}
+    \caption{Another way to divide a gauge field configuration into two sublattices, in agreement with Julia's index convention, where \texttt{i} in \texttt{...[i, j]} means $x$ and \texttt{j} means $y$.}
+    \label{fig:z2-dividing-real}
+\end{figure}
+
 
 \section{Simulation of \Ztwo gauge theory with different approaches}
 
 \subsection{Monte Carlo simulation of the pure \Ztwo gauge theory with gauge \eqref{eq:gauge-choice-x}}
 
-\subsubsection{The phase diagram}
+It should be kept in mind that the gauge \eqref{eq:gauge-choice-x} is \emph{not} a good gauge choice when a transverse field is introduced.
+This section, therefore, is mainly about how wrong it is, and whether predictions that are \emph{valid} under \eqref{eq:gauge-choice-x} - most importantly, no thermal phase transition when $h=0$ - is observed in the numerical simulation.
+
+\subsubsection{The magnetization and the phase diagram}
 
 \begin{figure}
     \centering
@@ -543,7 +624,7 @@ How
         \includegraphics[width=\textwidth]{phase/phase-diagram-transverse-ising-wolff.PNG}
         \subcaption{}
     \end{subfigure}
-    \caption{Phase diagrams of 1D transverse field Ising chain obtained with different updating algorithms. The $x$ coordinate is $h$ and the $y$ coordinate is $T$. (a) Metropolis algorithm (b) Wolff cluster algorithm. 
+    \caption{Magnetization of 1D transverse field Ising chain obtained with different updating algorithms. The $x$ coordinate is $h$ and the $y$ coordinate is $T$. (a) Metropolis algorithm (b) Wolff cluster algorithm. 
     It can be seen that Metropolis algorithm does not work well when $h$ is small.}
     \label{fig:comparision-metropolis-wolff}
 \end{figure}
@@ -554,6 +635,17 @@ Cluster update methods - in this project Wolff cluster updating \cite{Wolff_1989
 where Metropolis algorithm cannot update the system sufficiently when $h=0$, 
 since in that case the 2D \cim corresponding to the 1D transverse field Ising chain degenerates into a classical 1D Ising chain due to the vanishing quantum fluctuation, 
 so the coupling strength in the temporal direction approaches to infinite.
+
+By calculating the magnetic susceptibility we find there is indeed no thermal phase transition.
+It can be seen in \prettyref{fig:comparision-metropolis-wolff} that the magnetization changes quite smoothly in the $T$ direction.
+There is a quantum critical point at $T = 0, h = 1$, which agrees with known theoretical results \cite{sachdev_2011}.
+
+\prettyref{fig:comparision-metropolis-wolff} is therefore qualitatively the same as \prettyref{fig:phase-diagram-expected-pure-z2}.
+Since \eqref{eq:gauge-choice-x} is wrong, we will not expect the critical point in \prettyref{fig:comparision-metropolis-wolff} agrees with the true critical point of the Ising gauge theory on a square lattice.
+
+\subsubsection{The area law and the perimeter law}
+
+It is kind of surprising - or maybe not that surprising - that under . % TODO
 
 \subsection{Monte Carlo simulation of the pure \Ztwo theory's dual transverse field Ising model}
 
@@ -587,26 +679,6 @@ so the coupling strength in the temporal direction approaches to infinite.
 
 \subsection{The \Ztwo gauge theory}
 
-\begin{figure}
-    \centering
-    \input{lattice/gauge-sublattice.tex}
-    \caption{Dividing a gauge field configuration into two sublattices}
-    \label{fig:z2-dividing}
-\end{figure}
-
-\Ztwo gauge degrees of freedom are defined on bonds. 
-Suppose there are $N$ sites. Since there are 4 bonds connecting to one site and a bond is shared by two sites,
-there are $4 N / 2 = 2 N$ bonds.
-Therefore, the \Ztwo gauge degrees of freedom can be divided into two sublattices, each of which has $N$ degrees of freedom, shown in \prettyref{fig:z2-dividing}.
-Actually in order to be consistent with Julia's array indexing convention, we choose \prettyref{fig:z2-dividing-real} as our convention to label the \Ztwo gauge degrees of freedom.
-Note that the definition of A sublattice and B sublattice in \prettyref{fig:z2-dividing} is exactly opposite to the definition in \prettyref{fig:z2-dividing-real}.
-
-\begin{figure}
-    \centering
-    \input{lattice/gauge-sublattice-real.tex}
-    \caption{Another way to divide a gauge field configuration into two sublattices, in agreement with Julia's index convention, where \texttt{i} in \texttt{...[i, j]} means $x$ and \texttt{j} means $y$.}
-    \label{fig:z2-dividing-real}
-\end{figure}
 
 \subsection{Fermions}
 
