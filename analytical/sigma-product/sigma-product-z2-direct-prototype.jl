@@ -104,3 +104,4 @@ function B_τ_trotter(σ::DiscretePathIntegralZ2GaugeFieldPeriodicSquare2D, para
 end
 
 @show relative_err(B_τ_trotter(σ, params, 10), B_τ(σ, params, 10))
+# ~0.0003. Not a very precise result, especially considering we are only invesigating *one* imaginary time step. 
