@@ -39,6 +39,8 @@ all_ones_discrete_path_integral_z2_gauge_field(lattice::L, n_steps::Int) where {
 const DiscretePathIntegralZ2GaugeFieldPeriodicSquare2D{D} = 
     DiscretePathIntegralZ2GaugeField{PeriodicSquareLattice2DWithBonds, D}
 
+temporal_steps_count(σ::DiscretePathIntegralZ2GaugeFieldPeriodicSquare2D) = σ.n_steps
+
 # function DiscretePathIntegralZ2GaugeFieldPeriodicSquare2D(::Type{D}, lattice::PeriodicSquareLattice2DWithBonds, n_steps::Int) where {D} 
 #     n_sites = length(sites(lattice))
 #     DiscretePathIntegralZ2GaugeFieldPeriodicSquare2D(lattice, Array{D, 2}(undef, n_sites, n_steps))
@@ -51,6 +53,8 @@ const DiscretePathIntegralZ2GaugeFieldPeriodicSquare2D{D} =
 struct Z2GaugeTheoryDiscretePathIntegralMetropolisParams{F <: AbstractFloat}
     n_side::Int
     n_steps::Int
+    J::F
+    h::F
     β::F
     Δτ::F
     Jxy::F
@@ -59,7 +63,7 @@ end
 
 function Z2GaugeTheoryDiscretePathIntegralMetropolisParams(J::F, h::F, n_side::Int, n_steps::Int, β::F) where {F <: AbstractFloat}
     Δτ = β / n_steps
-    Z2GaugeTheoryDiscretePathIntegralMetropolisParams(n_side, n_steps, β, Δτ, Δτ * J, atanh.(exp.(- 2 * Δτ * h)))
+    Z2GaugeTheoryDiscretePathIntegralMetropolisParams(n_side, n_steps, J, h, β, Δτ, Δτ * J, atanh.(exp.(- 2 * Δτ * h)))
 end
 
 plaquatte_op(z2field::DiscretePathIntegralZ2GaugeFieldPeriodicSquare2D, i::Int, τ::Int) = 

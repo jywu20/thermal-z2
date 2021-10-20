@@ -6,9 +6,8 @@
 \usepackage{paralist}
 \usepackage{footnote}
 \usepackage{enumerate}
-\usepackage{amsmath, amssymb, amsthm}
+\usepackage{amsmath, amssymb, amsthm, bm}
 \usepackage{mathtools}
-\usepackage{bbm}
 \usepackage{cite}
 \usepackage{graphicx}
 \usepackage{grffile}
@@ -98,12 +97,8 @@ In the whole article we use $\sigma$ and $s$ as shorthands of $\sigma^z$ and $s^
 The model investigated in this article is shown in \cite{moon2019deconfined}.
 The model Hamiltonian is 
 \begin{equation}
-    H = H_Z \underbrace{- J \sum_{\pair{\vb*{i}, \vb*{j}}} \sigma_{\vb*{i} \vb*{j}} s_{\vb*{i}} s_{\vb*{j}} + \sum_i h^x_i s^x_i}_{H_\text{Ising}} - t \sum_{\pair{\vb*{i}, \vb*{j}}} \sigma_{\vb*{i} \vb*{j}} c^\dagger_{\vb*{i}} c_{\vb*{j}},
+    H = \underbrace{- g \sum_{\vb*{l} \in \Box_{\vb*{i}^*}} \sigma_{\vb*{i} \vb*{j}}^z - h \sum_{\pair{\vb*{i}, \vb*{j}}} \sigma^x_{\vb*{i} \vb*{j}}}_{H_Z} \underbrace{- J \sum_{\pair{\vb*{i}, \vb*{j}}} \sigma_{\vb*{i} \vb*{j}} s_{\vb*{i}} s_{\vb*{j}} + \sum_i h^x_i s^x_i}_{H_\text{Ising}} \underbrace{- t \sum_{\pair{\vb*{i}, \vb*{j}}} \sigma_{\vb*{i} \vb*{j}} c^\dagger_{\vb*{i}} c_{\vb*{j}}}_{H_\text{hopping}},
     \label{eq:proposed-model}
-\end{equation}
-where
-\begin{equation}
-    H_Z = - g \sum_{\vb*{l} \in \Box_{\vb*{i}^*}} \sigma_{\vb*{i} \vb*{j}}^z - h \sum_{\pair{\vb*{i}, \vb*{j}}} \sigma^x_{\vb*{i} \vb*{j}}, 
 \end{equation}
 where $\vb*{i}^*$ is a site in the dual lattice (i.e. a site placed at the center of a plaquette), 
 $\Box_{\vb*{i}^*}$ is the plaquette whose center is $\vb*{i}^*$, and $\vb*{l}$ denotes a certain bond of a plaquette.
@@ -319,7 +314,7 @@ We can use discrete path integral methods or maybe SSE to evaluate these weights
         \subcaption{$h = 10$}
     \end{subfigure}
     \caption{$J_{xy} / J_\tau$ under different $h$. 
-    It can be seen that \eqref{eq:cim-from-tfim} is highly anisotropic for a large range of $J$.}
+    It can be seen that \eqref{eq:cim-from-tfim} is highly anisotropic for a large range of $J$. The diagrams are plotted using \href{../analytical/jxy-jtau-ratio/2d-tfim-to-3d-cim-v2.jl}{this script}. }
     \label{fig:jxy-jtau-ratio}
 \end{figure}
 
@@ -380,14 +375,15 @@ at $T = 1$, where
     \label{fig:extreme-tau}
 \end{figure}
 
-To ensure high accuracy, we have to use a $\Delta \tau$ small enough, especially for a large $h$.
+To ensure high accuracy, we have to use a $\Delta \tau$ small enough, especially for a large $h$, or otherwise we will have large Trotter error.
 From \prettyref{fig:jxy-jtau-ratio} we can see that when $\Delta \tau$ is large, the contours are more horizontal, or in other words, the change of $J$ may not be reflected faithfully to the change of $J_{xy} / J_\tau$.
 Since the discrete path integral will be studied as a classical Ising model \eqref{eq:cim-from-tfim} under a fixed temperature, the system is characterized by $J_{xy} / J_\tau$, and if $J_{xy} / J_\tau$ does not reflect the properties of the transverse field Ising model faithfully the Monte Carlo simulation of \eqref{eq:cim-from-tfim} does not make any sense.
 An extreme case can be found in \prettyref{fig:extreme-tau}, where the contours are almost completely horizontal.
 
-Another fact that can be read from \prettyref{fig:jxy-jtau-ratio} is that for large $h / K$ $\Delta \tau$ should be smaller to keep the same accuracy.
-The larger $h$ is, the stronger the quantum fluctuation is, 
-and with strong quantum fluctuation $\Delta \tau$ must be small enough to accurately track the time evolution.
+% TODO: are these claims true?
+%Another fact that can be read from \prettyref{fig:jxy-jtau-ratio} is that for large $h / K$ $\Delta \tau$ should be smaller to keep the same accuracy.
+%The larger $h$ is, the stronger the quantum fluctuation is, 
+%and with strong quantum fluctuation $\Delta \tau$ must be small enough to accurately track the time evolution.
 
 It should be noted, however, that \eqref{eq:cim-from-tfim} is usually highly anisotropic between time and space, so when $\Delta \tau$ goes too small, the model is hard to simulate with Metropolis algorithm.
 
@@ -534,7 +530,7 @@ by introducing a transverse field (or string tension term), we have already done
 
 \subsubsection{General ideas of DQMC}
 
-\concept{Detrimental Quantum Monte Carlo (DQMC)} is a discrete path integral for fermions, 
+\concept{Determinant Quantum Monte Carlo (DQMC)} is a discrete path integral for fermions, 
 where an (bosonic) auxiliary field is introduced by Hubbard-Stratonovich transformation and Green functions of the fermions can be recast in terms of the auxiliary field, so we rephrase a fermionic problem into a bosonic one.
 
 The way to simulate fermions coupled to an Ising field with a coupling Hamiltonian in the form of 
@@ -544,6 +540,29 @@ The way to simulate fermions coupled to an Ising field with a coupling Hamiltoni
 can be found in the appendix of \cite{Chen_2021}. 
 
 \subsubsection{DQMC for fermion-gauge field coupling in \eqref{eq:proposed-model}}   
+
+DQMC for \eqref{eq:proposed-model} is kind of different from the usual DQMC for interacting fermion systems, because here deconfined fermions do not have direct interaction.
+We can directly integrate out the fermionic degrees of freedom and obtain a discrete path integral for only the \Ztwo gauge field and the Ising field.
+For example, we introduce a Trotter decomposition with imaginary time step $\Delta \tau = \beta / m$, choose $\sigma_{\vb*{i} \vb*{j}}, s_{\vb*{i}}$ as labels for the \Ztwo field and the Ising field, respectively, and integrate out the fermion hopping term. 
+Now a configuration of the systems is a sequence of length $m$, and at each imaginary time point $\tau$ there is a \Ztwo field $\sigma_{\vb*{i} \vb*{j}}(\tau)$ and an Ising field $s_{\vb*{i} \vb*{j}}(\tau)$.
+The weight of a configuration is 
+\begin{equation}
+    \begin{aligned}
+        &\quad W(\sigma, s) \\
+        &= \trace_\text{fermion} \prod_{\tau = 1}^{m\Delta \tau} \mel{(\sigma, s)(\tau+\Delta \tau)}{\ee^{-\Delta \tau H_Z} \ee^{- \Delta \tau H_\text{Ising}}}{(\sigma, s)(\tau)} \ee^{\Delta \tau t \sum_{\pair{\vb*{i}, \vb*{j}}} \sigma_{\vb*{i} \vb*{j}}(\tau) c_i^\dagger c_{\vb*{j}}} \\
+        &= \det \left(1 + \prod_{\tau = 1}^{m\Delta \tau} \ee^{\Delta \tau t \bm{\sigma}(\tau)}\right) \prod_{\tau = 1}^{m\Delta \tau} \mel{(\sigma, s)(\tau+\Delta \tau)}{\ee^{-\Delta \tau H_Z} \ee^{- \Delta \tau H_\text{Ising}}}{(\sigma, s)(\tau)} \\
+        &= \det \left(1 + \prod_{\tau = 1}^{m\Delta \tau} \ee^{\Delta \tau t \bm{\sigma}(\tau)}\right) \prod_{\tau = 1}^{m\Delta \tau} \mel{\sigma(\tau + \Delta \tau)}{\ee^{-\Delta \tau H_Z}}{\sigma(\tau)} \mel{s(\tau + \Delta \tau)}{\ee^{-\Delta \tau H_\text{Ising}|_{\sigma(\tau)}}}{s(\tau)} ,
+    \end{aligned}
+\end{equation}
+where $\bm{\sigma} = \{\sigma_{\vb*{i} \vb*{j}}(\tau)\}$ and $s = \{s_{\vb*{i}}(\tau)\}$, 
+and in the last line values of $\sigma(\tau)$ replaces the $\sigma^z$ operators in $H_\text{Ising}$.
+We can see that the \Ztwo part and the \tfim{} part now has nothing to do with the fermions - as is the case in ordinary continuous path integrals - and can be simulated either natively by considering the path integral as a classical statistical model to be calculated with the Metropolis algorithm or maybe some cluster update algorithms, or by more sophisticated algorithms like the SSE.
+As for the factor containing the product of $\ee^{\Delta\tau t \bm{\sigma}(\tau)}$, i.e. 
+\begin{equation}
+    W_\text{fermion}(\sigma) = \det \left(1 + \prod_{\tau = 1}^{m\Delta \tau} \vb{B}(\tau) \right), \quad \vb{B}(\tau) =  \ee^{\Delta \tau t \bm{\sigma}(\tau)},
+\end{equation}
+we find their effective calculation is very hard and should better be updated using DQMC, and here the \Ztwo gauge theory $\sigma_{\vb*{i} \vb*{j}}(\tau)$ plays the role of the auxiliary field.
+The acceptance rate can be calculated as 
 
 \section{Some details of the program}
 
@@ -689,19 +708,6 @@ It is kind of surprising - or maybe not that surprising - that under . % TODO
 \end{figure}
 
 \section{Monte Carlo simulation of the whole model \eqref{eq:proposed-model}}
-
-We introduce a Trotter decomposition with imaginary time step $\Delta \tau = \beta / m$, choose $\sigma_{\vb*{i} \vb*{j}}, s_{\vb*{i}}$ as labels for the \Ztwo field and the Ising field, respectively, and integrate out the fermion hopping term. 
-Now a configuration of the systems is a sequence of length $m$, and at each imaginary time point $\tau$ there is a \Ztwo field $\sigma_{\vb*{i} \vb*{j}}(\tau)$ and an Ising field $s_{\vb*{i} \vb*{j}}(\tau)$.
-The weight of a configuration is 
-\[
-    \begin{aligned}
-        W(\sigma, s) &= \trace_\text{fermion} \prod_{\tau = 1}^{m\Delta \tau} \mel{(\sigma, s)(\tau+\Delta \tau)}{\ee^{-\Delta \tau H_Z} \ee^{- \Delta \tau H_\text{Ising}}}{(\sigma, s)(\tau)} \ee^{\Delta \tau t \sum_{\pair{\vb*{i}, \vb*{j}}} \sigma_{\vb*{i} \vb*{j}}(\tau) c_i^\dagger c_{\vb*{j}}} \\
-        &= \prod_{\tau = 1}^{m\Delta \tau} \mel{(\sigma, s)(\tau+\Delta \tau)}{\ee^{-\Delta \tau H_Z} \ee^{- \Delta \tau H_\text{Ising}}}{(\sigma, s)(\tau)} \det \left(1 + \prod_{\tau = 1}^{m\Delta \tau} \ee^{\Delta \tau t \sigma(\tau)}\right) \\
-        &= \prod_{\tau = 1}^{m\Delta \tau} \mel{\sigma(\tau + \Delta \tau)}{\ee^{-\Delta \tau H_Z}}{\sigma(\tau)} \mel{s(\tau + \Delta \tau)}{\ee^{-\Delta \tau H_\text{Ising}|_{\sigma(\tau)}}}{s(\tau)} \det \left(1 + \prod_{\tau = 1}^{m\Delta \tau} \ee^{\Delta \tau t \sigma(\tau)}\right).
-    \end{aligned}
-\]
-where $\sigma = \{\sigma_{\vb*{i} \vb*{j}}(\tau)\}$ and $s = \{s_{\vb*{i}}(\tau)\}$, 
-and in the last line values of $\sigma(\tau)$ replaces the $\sigma^z$ operators in $H_\text{Ising}$.
 
 \bibliographystyle{plain}
 \bibliography{note} 

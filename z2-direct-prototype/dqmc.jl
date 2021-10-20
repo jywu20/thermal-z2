@@ -1,3 +1,16 @@
+struct DeconfinedFermionsDQMCParams{F <: AbstractFloat}
+    t::F
+    n_steps::Int
+    n_side::Int
+    n_sites::Int
+    Δτ::F
+    β::F
+end
+
+function DeconfinedFermionsDQMCParams(t::F, n_side::Int, n_sites::Int, β::F) where {F <: AbstractFloat}
+    DeconfinedFermionsDQMCParams(t, n_sites, n_side, n_side^2, β / n_steps, β)
+end
+
 function tight_binding_kinetic_matrix_periodic(lattice::PeriodicSquareLattice2DWithBonds)
     lattice_sites = sites(lattice)
     T = zeros(length(lattice_sites), length(lattice_sites))
@@ -32,10 +45,16 @@ Returns plaquattes that are included in the checkboard decomposition.
 The lattice should have an even n_side.
 """
 function checkboard_decomposition(lattice::PeriodicSquareLattice2DWithBonds)
-    n_side_lattice = n_side(lattice)
+    n_side_lattice = side_sites_num(lattice)
     sub_A = Int[i + j for i in 0 : 2n_side_lattice : n_side_lattice^2 - 1 for j in 1 : 2 : n_side_lattice]
     sub_B = Int[i + j for i in n_side_lattice : 2n_side_lattice : n_side_lattice^2 for j in 2 : 2 : n_side_lattice]
     (sub_A, sub_B)
+end
+
+function bond_hopping_mat(σ::DiscretePathIntegralZ2GaugeFieldPeriodicSquare2D, b::Int, τ::Int)
+    lattice = σ.lattice
+    lattice_n_sites = length(sites(lattice))
+    Tij(lattice_n_sites, bond_to_sites(lattice, b)...) * σ[b, τ]
 end
 
 function plaquatte_hamiltonian(z2field::DiscretePathIntegralZ2GaugeFieldPeriodicSquare2D, p::Int, τ::Int)

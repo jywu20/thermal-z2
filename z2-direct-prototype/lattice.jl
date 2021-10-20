@@ -11,6 +11,8 @@ abstract type AbstractLattice{SiteType, CoorType} end
 
 sites(lattice::L) where {S, C, L <: AbstractLattice{S, C}} = @error "Site list not defined for lattice type $L."
 
+sites_num(lattice::L) where {S, C, L <: AbstractLattice{S, C}} = @error "Site counting not supported by lattice type $L."
+
 site_to_coord(lattice::L, site::S) where {S, C, L <: AbstractLattice{S, C}} = @error "Site to coordinate rules not defined for lattice type $L."
 
 coord_to_site(lattice::L, coord::C) where {S, C, L <: AbstractLattice{S, C}} = @error "Coordinate to site rules not defined for lattice type $L."
@@ -45,7 +47,7 @@ plaquatte(lattice::L, site::S) where {S, C, L <: AbstractLattice{S, C}} = @error
 
 plaquattes(lattice::L) where {S, C, L <: AbstractLattice{S, C}} = @error "Plaquattes not defined for lattice type $L."
 
-n_side(lattice::L) where L <: AbstractLattice = @error "No well defined side length for lattice type $L."
+side_sites_num(lattice::L) where L <: AbstractLattice = @error "No well defined side length for lattice type $L."
 
 #endregion
 
@@ -72,7 +74,7 @@ function SquareLattice2D(n_side::Int)::SquareLattice2D
     SquareLattice2D(n_side, site_list, inverse_list)
 end
 
-n_side(lattice::SquareLattice2D) = lattice.n_side
+side_sites_num(lattice::SquareLattice2D) = lattice.n_side
 
 sites(lattice::SquareLattice2D) = 1 : lattice.n_side^2
 
@@ -191,7 +193,7 @@ site_y_backward_move(lattice::PeriodicSquareLattice2D, site::Int)::Int = nearest
 
 sites(lattice::PeriodicSquareLattice2D) = sites(lattice.lattice)
 
-n_side(lattice::PeriodicSquareLattice2D) = n_side(lattice.lattice)
+side_sites_num(lattice::PeriodicSquareLattice2D) = side_sites_num(lattice.lattice)
 
 #endregion
 
@@ -239,7 +241,9 @@ sites(lattice::PeriodicSquareLattice2DWithBonds) = sites(lattice.lattice)
 
 coord_to_site(lattice::PeriodicSquareLattice2DWithBonds, coord::Tuple{Int, Int}) = coord_to_site(lattice.lattice, coord)
 
-n_side(lattice::PeriodicSquareLattice2DWithBonds) = n_side(lattice.lattice)
+side_sites_num(lattice::PeriodicSquareLattice2DWithBonds) = side_sites_num(lattice.lattice)
+
+sites_num(lattice::PeriodicSquareLattice2DWithBonds) = length(sites(lattice))
 
 bond(lattice::PeriodicSquareLattice2DWithBonds, i::Int, j::Int) = lattice.bond_to_dual_site[i, j]
 
@@ -249,7 +253,7 @@ bond_lattice(lattice::PeriodicSquareLattice2DWithBonds) = lattice.bonds_dual_lat
 
 function bond_to_sites(lattice::PeriodicSquareLattice2DWithBonds, b::Int)
     this_bond_lattice = bond_lattice(lattice)
-    this_n_side = n_side(lattice)
+    this_n_side = side_sites_num(lattice)
     x, y, t = site_to_coord(this_bond_lattice, b)
     start_point = coord_to_site(lattice, (x, y))
     if t == A

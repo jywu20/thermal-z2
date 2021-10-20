@@ -167,3 +167,5 @@ Currently `analytical\jxy-jtau-ratio\ratio-h=1.PNG` and `analytical\jxy-jtau-rat
 # 2021.10.20
 
 `analytical\jxy-jtau-ratio\ratio-h-10-extreme-range.PNG` is generated using `analytical\jxy-jtau-ratio\2d-tfim-to-3d-cim-v2.jl`.
+
+Create `analytical\sigma-product\sigma-product-z2-direct-prototype.jl` to define quantities used in the fermion DQMC, as well as verify whether everything is done right in `z2-direct-prototype`.
