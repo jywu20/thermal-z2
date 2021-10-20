@@ -160,3 +160,10 @@ Try to simplify the lattice definition, and make `site_list` and `inverse_list` 
 # 2021.10.19
 
 Add `docs\lattice\lattice-representation.tex` which illustrate how the lattice is represented in the program.
+
+Add `analytical\jxy-jtau-ratio\2d-tfim-to-3d-cim-v2.jl` to draw $J_{xy} / J_\tau$ in the correct way.
+Currently `analytical\jxy-jtau-ratio\ratio-h=1.PNG` and `analytical\jxy-jtau-ratio\ratio-h=4.PNG` are not correct.
+
+# 2021.10.20
+
+`analytical\jxy-jtau-ratio\ratio-h-10-extreme-range.PNG` is generated using `analytical\jxy-jtau-ratio\2d-tfim-to-3d-cim-v2.jl`.
