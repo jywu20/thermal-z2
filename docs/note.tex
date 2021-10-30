@@ -72,7 +72,7 @@
   keywordstyle=\color{blue}
 }
 
-\newcommand*{\Ztwo}{$\mathbb{Z}_2$ }
+\newcommand*{\Ztwo}{\texorpdfstring{$\mathbb{Z}_2$ }{Z2 }}
 \newcommand*{\tfim}{transverse field Ising model}
 \newcommand*{\cim}{classical Ising model}
 
@@ -82,6 +82,11 @@
   \def\texttt#1{<#1>}%
   \def\mathbb#1{#1}%
 }
+\pdfstringdefDisableCommands{\def\eqref#1{(\ref{#1})}}
+
+\makeatletter
+\pdfstringdefDisableCommands{\let\HyPsd@CatcodeWarning\@gobble}
+\makeatother
 
 \title{\Ztwo Gauge Field Coupled to a Fermion System}
 \author{Jinyuan Wu}
@@ -473,6 +478,12 @@ The weight of a field configuration with $N_\text{p}$ pairing fragments and $N_\
 
 \subsubsection{Dual transverse Ising model}
 
+It is possible to simulate the \Ztwo gauge theory via simulating its dual \tfim.
+It should be pointed out that removing gauge redundancy will generally make a gauge theory with matter fields non-local.
+In out case, when the \Ztwo gauge theory is rephrased into a \tfim, the coupling term between $\sigma^z$ and deconfined fermions will involve a string operator.
+
+Therefore, we will mostly focus on simulating the \Ztwo gauge theory as it is, and only use the dual \tfim model as a benchmark.
+
 \subsubsection{Simulating \Ztwo gauge theory as it is: discrete path integral of \Ztwo guage theory}
 
 Similar to the case in 2D \tfim{}, we may use a discrete path integral to turn the \Ztwo gauge theory \eqref{eq:standard-z2-theory} into a classical statistical model.
@@ -564,6 +575,14 @@ As for the factor containing the product of $\ee^{\Delta\tau t \bm{\sigma}(\tau)
 we find their effective calculation is very hard and should better be updated using DQMC, and here the \Ztwo gauge theory $\sigma_{\vb*{i} \vb*{j}}(\tau)$ plays the role of the auxiliary field.
 The acceptance rate can be calculated as 
 
+Trotter errors are largely ignored in this project. Nor will we perform a systematic analysis to see whether the Trotter errors are bounded.
+This is actually reasonable because terms and parameters in \eqref{eq:proposed-model} are \emph{not} based on any \emph{ab initio} results, and the universality of \eqref{eq:proposed-model} is more important than its quantitative behaviors.
+Usually, Trotter errors do not change the universality class, so we will be willing to forget about them.
+When we do have to simulate the behaviors of \eqref{eq:proposed-model} quantitative, we can always do the computation with different $\Delta \tau$ choices and plot the observables to see the $\Delta \tau \to 0$ limit.
+
+Some Monte Carlo flavors other than out discrete path integral approach - for example, the SSE - do not have the problem of Trotter errors, but there are other errors that are hard to keep track of.
+The maximum order of terms in the SSE, for example, largely determine the precision, and within the framework of the SSE we have to do observables v.s. expansion order plotting and extrapolation.
+
 \section{Some details of the program}
 
 \subsection{The lattice}
@@ -573,7 +592,8 @@ The acceptance rate can be calculated as
     \caption{How the lattice is represented in the program. 
     The black numbers placed on sites are the indices of the sites.
     The red and blue numbers placed on bonds are the indices of the bonds. The bonds form a centered square lattice, and the red numbers correspond to bonds in the A sublattice, the blue numbers the B sublattice.
-    The grey numbers placed on the center of each plaquette is the index of the plaquette.}
+    The grey numbers placed on the center of each plaquette is the index of the plaquette.
+    Sites in the gray square box are actually stored, while sites out of the gray square box are illustrated to visualize the periodic boundary condition.}
     \label{fig:label-representation}
 \end{figure}
 
