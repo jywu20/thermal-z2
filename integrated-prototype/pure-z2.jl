@@ -12,7 +12,7 @@ struct Z2GaugeFieldDPI{L <: AbstractLatticeWithPlaquattes{Int, Int, Int}, V} <: 
     data::Array{Int, 2}
 end
 
-lattice(σ::Z2GaugeFieldDPI) = σ.lattice
+field_lattice(σ::Z2GaugeFieldDPI) = σ.lattice
 time_step_number(σ::Z2GaugeFieldDPI) = σ.n_τ
 time_steps(σ::Z2GaugeFieldDPI) = 1 : σ.n_τ
 timeslice(σ::Z2GaugeFieldDPI, τ::Int) = σ.data[:, τ]
@@ -34,7 +34,7 @@ Set σ^z_b(τ) = v.
 """
 setindex!(σ::Z2GaugeFieldDPI, v, b::Int, τ::Int) = σ.data[b, τ] = v
 
-function AllOnesZ2GaugeFieldDPI(::Type{V}, lattice::L, n_τ) where {L <: AbstractLatticeWithPlaquattes{Int, Int, Int}, V}
+function ones_Z2_gauge_field_DPI(::Type{V}, lattice::L, n_τ) where {L <: AbstractLatticeWithPlaquattes{Int, Int, Int}, V}
     Z2GaugeFieldDPI{L, V}(n_τ, lattice, ones(V, bond_number(lattice) , n_τ))
 end
 
@@ -47,7 +47,7 @@ The B_p = ∏_{b ∈ ☐_p} σᶻ_b(τ) operator defined on a time step τ.
 
 `p` is the plaquatte.
 """
-prod_σ_plaquatte(σ::Z2GaugeFieldDPI, p::Int, τ::Int) = map(b -> σ[b, τ], plaquatte_to_bonds(lattice(σ), p)) |> prod
+prod_σ_plaquatte(σ::Z2GaugeFieldDPI, p::Int, τ::Int) = map(b -> σ[b, τ], plaquatte_to_bonds(field_lattice(σ), p)) |> prod
 
 """
 ∑_p B_p / N.
@@ -97,9 +97,9 @@ function sweep!(model::IsingGaugeTheoryDPIMetropolisMC, σ::Z2GaugeFieldDPI, n_s
     lattice_bonds = bonds(σ.lattice)
 
     for _ in 1 : n_sweep
-        for τ in 1 : model.n_steps
+        for τ in time_steps(σ)
             for b in lattice_bonds
-                if rand() < accept_rate(σ, model, b, τ)
+                if rand() < accept_rate(model, σ, b, τ)
                     σ[b, τ] *= -1 
                 end
             end

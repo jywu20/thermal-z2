@@ -4,7 +4,7 @@ abstract type AbstractModel end
 
 abstract type AbstractConfigration end
 
-function lattice(::C) where {C <: AbstractConfigration}
+function field_lattice(::C) where {C <: AbstractConfigration}
     error("The lattice of configuration type $C not defined.")
 end
 
