@@ -5,7 +5,7 @@ as one lattice may have several coordinate systems.
 """
 abstract type AbstractLattice{SiteType} end
 
-function site_list(::L) where {L <: AbstractLattice}
+function sites(::L) where {L <: AbstractLattice}
     error("List of all sites not defined for lattice type $L.")
 end
 
@@ -38,7 +38,7 @@ The abstract type of all lattices with plaquattes.
 """
 abstract type AbstractLatticeWithPlaquattes{SiteType, BondType, PlaquatteType} <: AbstractLattice{SiteType} end
 
-function bond_list(::L) where {L <: AbstractLatticeWithPlaquattes}
+function bonds(::L) where {L <: AbstractLatticeWithPlaquattes}
     error("List of all bonds not defined for lattice type $L.")
 end
 
@@ -70,7 +70,7 @@ function sites_to_bond(::L, ::S, ::S)::B where {S, B, P, L <: AbstractLatticeWit
     error("Sites to bond rule not defined for lattice type $L.")
 end
 
-function plaquatte_list(::L) where {L <: AbstractLatticeWithPlaquattes}
+function plaquattes(::L) where {L <: AbstractLatticeWithPlaquattes}
      error("Plaquattes not defined for lattice type $L.")
 end
 

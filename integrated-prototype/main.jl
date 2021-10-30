@@ -1,5 +1,0 @@
-include("utils.jl")
-include("abstract-lattice.jl")
-include("square-lattice.jl")
-include("model.jl")
-include("configuration.jl")

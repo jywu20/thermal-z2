@@ -102,17 +102,20 @@ function SquareLattice2DPeriodic(n_side::Int)::SquareLattice2DPeriodic
         plaquatte_corner_list, plaquatte_bonds_list, bond_sharing_plaquatte_list)
 end
 
-site_list(lattice::SquareLattice2DPeriodic) = lattice.site_list
+sites(lattice::SquareLattice2DPeriodic) = 1 : lattice.n_side^2 
 site_number(lattice::SquareLattice2DPeriodic) = lattice.n_side^2
 coord_to_site(lattice::SquareLattice2DPeriodic, coord) = lattice.inverse_site_list[coord...]
 site_to_coord(lattice::SquareLattice2DPeriodic, site::Int) = lattice.site_list[site]
+
+bond_number(lattice::SquareLattice2DPeriodic) = 2 * lattice.n_side^2
+bonds(lattice::SquareLattice2DPeriodic) = 1 : 2 * lattice.n_side^2 
 
 nearest_neighbors(lattice::SquareLattice2DPeriodic, site::Int) = lattice.nn_list[site]
 bonds_around_site(lattice::SquareLattice2DPeriodic, site::Int) = lattice.bonds_around_site_list[site]
 bond_to_sites(lattice::SquareLattice2DPeriodic, bond::Int) = lattice.inverse_bond_list[bond]
 sites_to_bond(lattice::SquareLattice2DPeriodic, site1::Int, site2::Int) = lattice.bond_list[site1, site2]
 
-plaquatte_list(lattice::SquareLattice2DPeriodic) = site_list(lattice)
+plaquattes(lattice::SquareLattice2DPeriodic) = sites(lattice)
 plaquatte_to_corners(lattice::SquareLattice2DPeriodic, plaquatte::Int) = lattice.plaquatte_corners_list[plaquatte]
 plaquatte_to_bonds(lattice::SquareLattice2DPeriodic, plaquatte::Int) = lattice.plaquatte_bonds_list[plaquatte]
 plaquatte_containing_bond(lattice::SquareLattice2DPeriodic, bond::Int) = lattice.bond_sharing_plaquattes_list[bond]

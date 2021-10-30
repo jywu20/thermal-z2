@@ -1,4 +1,4 @@
-include("main.jl")
+include("lib.jl")
 
 ##
 
