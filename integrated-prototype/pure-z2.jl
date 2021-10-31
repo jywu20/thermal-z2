@@ -6,35 +6,35 @@ Z2 gauge field, **D**iscrete **P**ath **I**ntegral configuration.
 `V` is the data type for spins defined on bonds. It must be something that can be multiplied like an integer, 
 since 
 """
-struct Z2GaugeFieldDPI{L <: AbstractLatticeWithPlaquattes{Int, Int, Int}, V} <: AbstractDiscretePathIntegralConfiguration
+struct Z2GaugeFieldDPI{L <: AbstractLatticeWithPlaquattes, V} <: AbstractDiscretePathIntegralConfiguration
     n_τ::Int
     lattice::L
-    data::Array{Int, 2}
+    data::Array{V, 2}
 end
 
 field_lattice(σ::Z2GaugeFieldDPI) = σ.lattice
 time_step_number(σ::Z2GaugeFieldDPI) = σ.n_τ
 time_steps(σ::Z2GaugeFieldDPI) = 1 : σ.n_τ
-timeslice(σ::Z2GaugeFieldDPI, τ::Int) = σ.data[:, τ]
+timeslice(σ::Z2GaugeFieldDPI, τ) = σ.data[:, τ]
 
 """
 Get value of σ^z_{ij}(τ).
 """
-getindex(σ::Z2GaugeFieldDPI, i::Int, j::Int, τ::Int) = σ.data[sites_to_bond(σ.lattice, i, j), τ]
+getindex(σ::Z2GaugeFieldDPI, i, j, τ) = σ.data[sites_to_bond(σ.lattice, i, j), τ]
 """
 Set σ^z_{ij}(τ) = v.
 """
-setindex!(σ::Z2GaugeFieldDPI, v, i::Int, j::Int, τ::Int) = σ.data[sites_to_bond(σ.lattice, i, j), τ] = v
+setindex!(σ::Z2GaugeFieldDPI, v, i, j, τ) = σ.data[sites_to_bond(σ.lattice, i, j), τ] = v
 """
 Get value of σ^z_b(τ).
 """
-getindex(σ::Z2GaugeFieldDPI, b::Int, τ::Int) = σ.data[b, τ]
+getindex(σ::Z2GaugeFieldDPI, b, τ) = σ.data[b, τ]
 """
 Set σ^z_b(τ) = v.
 """
-setindex!(σ::Z2GaugeFieldDPI, v, b::Int, τ::Int) = σ.data[b, τ] = v
+setindex!(σ::Z2GaugeFieldDPI, v, b, τ) = σ.data[b, τ] = v
 
-function ones_Z2_gauge_field_DPI(::Type{V}, lattice::L, n_τ) where {L <: AbstractLatticeWithPlaquattes{Int, Int, Int}, V}
+function ones_Z2_gauge_field_DPI(::Type{V}, lattice::L, n_τ) where {L <: AbstractLatticeWithPlaquattes, V}
     Z2GaugeFieldDPI{L, V}(n_τ, lattice, ones(V, bond_number(lattice) , n_τ))
 end
 
@@ -47,19 +47,19 @@ The B_p = ∏_{b ∈ ☐_p} σᶻ_b(τ) operator defined on a time step τ.
 
 `p` is the plaquatte.
 """
-prod_σ_plaquatte(σ::Z2GaugeFieldDPI, p::Int, τ::Int) = map(b -> σ[b, τ], plaquatte_to_bonds(field_lattice(σ), p)) |> prod
+prod_σ_plaquatte(σ::Z2GaugeFieldDPI, p, τ) = map(b -> σ[b, τ], plaquatte_to_bonds(field_lattice(σ), p)) |> prod
 
 """
 ∑_p B_p / N.
 """
-flux_average(σ::Z2GaugeFieldDPI, τ::Int) = mean(map(x -> prod_σ_plaquatte(σ, x, τ), sites(σ.lattice)))
+flux_average(σ::Z2GaugeFieldDPI, τ) = mean(map(x -> prod_σ_plaquatte(σ, x, τ), sites(σ.lattice)))
 
-function Δ_plaquatte_term(σ::Z2GaugeFieldDPI, b::Int, τ::Int)
+function Δ_plaquatte_term(σ::Z2GaugeFieldDPI, b, τ::Int)
     lattice = σ.lattice
     - 2 * sum(map(p -> prod_σ_plaquatte(σ, p, τ), plaquatte_containing_bond(lattice, b)))
 end
 
-function Δ_temporal_correlation_term(σ::Z2GaugeFieldDPI, b::Int, τ::Int)
+function Δ_temporal_correlation_term(σ::Z2GaugeFieldDPI, b, τ::Int)
     n_τ = time_step_number(σ)
     - 2 * σ[b, τ] * (σ[b, back_into_range(τ + 1, n_τ)] + σ[b, back_into_range(τ - 1, n_τ)])
 end

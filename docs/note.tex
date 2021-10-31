@@ -592,7 +592,13 @@ No reusable components, and no compositionality.
 That may be the reason why many people still use Fortran to implement quantum Monte Carlo algorithms even today,
 because no high-level feature is really required.
 
-That being said, 
+That being said, in this project we still try to make the code generic for several reasons.
+One reason is to avoid rewriting over and over again when faced with new models. 
+For example, defining \tfim{} and the Ising gauge theory on an arbitrary lattice can reduce our burden to have one program version for the square lattice and another version for the honeycomb lattice.
+Another reason is to make benchmarking easier. 
+We know unfolding concise codes involving linear algebra, array comprehension, etc. into lines can save a large amount of memory allocation time,
+but the cole after the expansion is hard to read and analyze.
+In this case, generic definitions can be used as a correct-yet-slow benchmark for the expanded version, which agrees with Julia's design philosophy.
 
 \subsection{The lattice}
 

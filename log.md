@@ -185,3 +185,10 @@ The phase diagram `integrated-prototype\2021-10-31-1\z2-flux-average-phase-diagr
 to be almost exactly the same with `z2-direct-prototype\2021-10-8-run-2\z2-flux-average.PNG`, but the 
 low temperature performance has been improved. (At the first glance the low transverse field performance is 
 also improved, but that is just illusion because in `integrated-prototype\2021-10-31-1` we start from $h=0.2$ instead of $h=0.1$.)
+
+Another batch of data - this time about the transverse field Ising model - is retrieved and stored in `integrated-prototype\2021-10-31-2`.
+
+The horizontal strips found in the figure appear to come from the fact that different $T$ are mapped to the same $n_\tau$.
+
+TODO:
+- check whether a large n_sweep results in seemingly worse image quantities.

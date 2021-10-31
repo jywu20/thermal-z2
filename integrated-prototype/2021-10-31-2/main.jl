@@ -8,7 +8,7 @@ n_heat = 2000
 n_sweep = 1000
 n_bin = 10
 n_side = 10
-show_progress = true 
+show_progress = false 
 immediate_store = true
 
 J = 1.0
@@ -20,8 +20,8 @@ h_steps = 80
 h_range = LinRange(0.2, 3.1, h_steps)
 
 # We are going to run the program by `julia main.jl`
-working_directory = "D:\\Projects\\thermal-z2\\integrated-prototype\\2021-10-31-2\\"
-#working_directory = "./"
+#working_directory = "D:\\Projects\\thermal-z2\\integrated-prototype\\2021-10-31-2\\"
+working_directory = "./"
 output_text_name = "output"
 
 open(working_directory * output_text_name, "w") do file
@@ -52,7 +52,7 @@ for (i, T) in enumerate(T_range)
 
         bin = []
         for _ in 1 : n_bin
-            push!(bin, mean(sweep!(model, s, n_sweep, observe = x -> magnetization(x, 1), observable_type = Float64)))
+            push!(bin, mean(sweep!(model, s, n_sweep, observe = x -> abs(magnetization(x, 1)), observable_type = Float64)))
         end
         magnetization_history[i, j] = mean(bin)
 
