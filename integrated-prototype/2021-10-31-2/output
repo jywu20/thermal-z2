@@ -1,0 +1,16 @@
+n_side   =   10
+dtau     =   0.1
+n_bin    =   10
+n_heat   =   2000
+n_sweep  =   1000
+T_min    = 0.1,    T_max = 4.1,   steps = 80
+h_min    = 0.2,    T_max = 3.1,   steps = 80
+J        =   1.0
+T = 0.1       h = 0.2      magnetization = 0.012
+T = 0.1       h = 0.2367088607594937      magnetization = -0.054000000000000006
+T = 0.1       h = 0.27341772151898736      magnetization = 0.03200000000000001
+T = 0.1       h = 0.31012658227848106      magnetization = 0.018
+T = 0.1       h = 0.3468354430379747      magnetization = -0.013999999999999995
+T = 0.1       h = 0.3835443037974684      magnetization = 0.032
+T = 0.1       h = 0.42025316455696204      magnetization = 0.064
+T = 0.1       h = 0.4569620253164557      magnetization = -0.052000000000000005

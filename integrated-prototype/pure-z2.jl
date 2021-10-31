@@ -112,3 +112,5 @@ function sweep!(model::IsingGaugeTheoryDPIMetropolisMC, σ::Z2GaugeFieldDPI, n_s
 
     results
 end
+
+#endregion

@@ -11,7 +11,7 @@ h_range = LinRange(0.2, 3.1, h_steps)
 
 ##
 
-working_path = "D:\\Projects\\thermal-z2\\integrated-prototype\\2021-10-31\\" 
+working_path = "D:\\Projects\\thermal-z2\\integrated-prototype\\2021-10-31-1\\" 
 output_text_name = "output"
 mag = open(working_path * output_text_name) do file
     mag_str = readlines(file)[9:end]
