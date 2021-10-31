@@ -177,3 +177,11 @@ Simplify the lattice module in `infra`. Codes from `z2-direct-prototype` is reus
 A much simpler version of 2D periodic square lattice is implemented and tested.
 
 The contents of `infra` is then copied to `integrated-prototype`.
+
+# 2021.10.31
+
+First run of pure $\mathbb{Z}_2$ gauge theory, stored in `integrated-prototype\2021-10-31`.
+The phase diagram `integrated-prototype\2021-10-31\z2-flux-average-phase-diagram.PNG` can be found 
+to be almost exactly the same with `z2-direct-prototype\2021-10-8-run-2\z2-flux-average.PNG`, but the 
+low temperature performance has been improved. (At the first glance the low transverse field performance is 
+also improved, but that is just illusion because in `integrated-prototype\2021-10-31` we start from $h=0.2$ instead of $h=0.1$.)
