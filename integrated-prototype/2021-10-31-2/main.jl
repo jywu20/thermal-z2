@@ -45,7 +45,7 @@ for (i, T) in enumerate(T_range)
         n_steps = Int(round(β / Δτ))
 
         lattice = SquareLattice2DPeriodic(n_side) 
-        s = ones_Ising_field(Int, lattice, n_steps)
+        s = ones_Ising_field_DPI(Int, lattice, n_steps)
         model = TransverseFieldIsingModelDPIMetropolisMC(Float64, s, J, h, Δτ)
         
         sweep!(model, s, n_heat)

@@ -14,7 +14,7 @@ timeslice(s::IsingFieldDPI, τ) = s.data[:, τ]
 setindex!(s::IsingFieldDPI, v, i, τ) = s.data[i, τ] = v
 getindex(s::IsingFieldDPI, i, τ) = s.data[i, τ]
 
-function ones_Ising_field(::Type{V}, lattice::L, n_τ) where {L <: AbstractLattice{Int}, V}
+function ones_Ising_field_DPI(::Type{V}, lattice::L, n_τ) where {L <: AbstractLattice{Int}, V}
     IsingFieldDPI{L, V}(n_τ, lattice, ones(V, site_number(lattice) , n_τ))
 end
 

@@ -1,4 +1,5 @@
 using Statistics
+using LinearAlgebra
 
 include("utils.jl")
 include("abstract-lattice.jl")

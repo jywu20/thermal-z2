@@ -38,6 +38,10 @@ function ones_Z2_gauge_field_DPI(::Type{V}, lattice::L, n_τ) where {L <: Abstra
     Z2GaugeFieldDPI{L, V}(n_τ, lattice, ones(V, bond_number(lattice) , n_τ))
 end
 
+function random_Z2_gauge_field_DPI(::Type{Int}, lattice::L, n_τ) where {L <: AbstractLatticeWithPlaquattes, V}
+    Z2GaugeFieldDPI{L, Int}(n_τ, lattice, rand((-1, 1), bond_number(lattice), n_τ))
+end
+
 #endregion
 
 #region The Ising gauge theory
@@ -54,12 +58,12 @@ prod_σ_plaquatte(σ::Z2GaugeFieldDPI, p, τ) = map(b -> σ[b, τ], plaquatte_to
 """
 flux_average(σ::Z2GaugeFieldDPI, τ) = mean(map(x -> prod_σ_plaquatte(σ, x, τ), sites(σ.lattice)))
 
-function Δ_plaquatte_term(σ::Z2GaugeFieldDPI, b, τ::Int)
+function Δ_plaquatte_term(σ::Z2GaugeFieldDPI, b, τ)
     lattice = σ.lattice
     - 2 * sum(map(p -> prod_σ_plaquatte(σ, p, τ), plaquatte_containing_bond(lattice, b)))
 end
 
-function Δ_temporal_correlation_term(σ::Z2GaugeFieldDPI, b, τ::Int)
+function Δ_temporal_correlation_term(σ::Z2GaugeFieldDPI, b, τ)
     n_τ = time_step_number(σ)
     - 2 * σ[b, τ] * (σ[b, back_into_range(τ + 1, n_τ)] + σ[b, back_into_range(τ - 1, n_τ)])
 end
@@ -85,7 +89,7 @@ function IsingGaugeTheoryDPIMetropolisMC(::Type{F}, σ::Z2GaugeFieldDPI, J::F, h
     IsingGaugeTheoryDPIMetropolisMC{F}(J, h, Δτ, β, J_xy, J_τ)
 end
 
-function accept_rate(model::IsingGaugeTheoryDPIMetropolisMC, σ::Z2GaugeFieldDPI, b::Int, τ::Int)
+function accept_rate(model::IsingGaugeTheoryDPIMetropolisMC, σ::Z2GaugeFieldDPI, b::Int, τ)
     J_xy = model.J_xy
     J_τ = model.J_τ
     exp(J_xy * Δ_plaquatte_term(σ, b, τ) + J_τ * Δ_temporal_correlation_term(σ, b, τ))

@@ -4,3 +4,5 @@ function back_into_range(idx, upper)
     end
     (idx - upper) % upper + upper
 end
+
+relative_err(m1, m2) = norm(m1 - m2) / norm(m2)
