@@ -8,6 +8,7 @@
 \usepackage{enumerate}
 \usepackage{amsmath, amssymb, amsthm, bm}
 \usepackage{mathtools}
+\usepackage{mathdots}
 \usepackage{cite}
 \usepackage{graphicx}
 \usepackage{grffile}
@@ -582,6 +583,37 @@ When we do have to simulate the behaviors of \eqref{eq:proposed-model} quantitat
 
 Some Monte Carlo flavors other than out discrete path integral approach - for example, the SSE - do not have the problem of Trotter errors, but there are other errors that are hard to keep track of.
 The maximum order of terms in the SSE, for example, largely determine the precision, and within the framework of the SSE we have to do observables v.s. expansion order plotting and extrapolation.
+
+\[
+    \exp(\Delta\tau t \pmqty{
+        \ddots & \vdots & & \vdots & \iddots \\
+        \cdots & 0 & \cdots & - \sigma^z_{\vb*{i} \vb*{j}}(\tau) & \cdots \\ 
+         & \vdots & & \vdots & \\
+        \cdots & - \sigma^z_{\vb*{i} \vb*{j}}(\tau) & \cdots & 0 & \cdots \\
+        \iddots & \vdots & & \vdots & \ddots
+    })= (\vb{I} + \vb{\Delta})  \exp(\Delta\tau t \pmqty{
+        \ddots & \vdots & & \vdots & \iddots \\
+        \cdots & 0 & \cdots & \sigma^z_{\vb*{i} \vb*{j}}(\tau) & \cdots \\ 
+         & \vdots & & \vdots & \\
+        \cdots & \sigma^z_{\vb*{i} \vb*{j}}(\tau) & \cdots & 0 & \cdots \\
+        \iddots & \vdots & & \vdots & \ddots
+    }) ,
+\]
+and therefore we have 
+\[
+    \vb{\Delta} = \exp\pmqty{\dmat{\vb{1}, -2 \Delta \tau t \sigma^x , \vb{1}}} - \vb{I},
+\]
+where the indices of the $\sigma^x$ block spans from $\vb*{i}$ to $\vb*{j}$.
+Note that 
+\[
+    \exp(\alpha \sigma^x) = \sigma^0 \cosh \alpha + \sigma^x \sinh \alpha,
+\]
+we obtain the projection of $\vb{\Delta}$ on the subspace of $\vb*{i}$ and $\vb*{j}$, which is 
+\begin{equation}
+    \Delta = \pmqty{ \cosh(2 \Delta \tau t \sigma_{\vb*{i} \vb*{j}}^z(\tau))-1 & - \sinh(2 \Delta \tau t \sigma_{\vb*{i} \vb*{j}}^z(\tau)) \\
+    - \sinh(2 \Delta \tau t \sigma_{\vb*{i} \vb*{j}}^z(\tau)) & \cosh(2 \Delta \tau t \sigma_{\vb*{i} \vb*{j}}^z(\tau)) - 1}.
+\end{equation}
+All other elements of $\vb{\Delta}$ are zero.
 
 \section{Some details of the program}
 

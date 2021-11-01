@@ -1,3 +1,5 @@
+import Base.copy
+
 #region The discrete path integral configuration of a Z2 gauge field.
 
 """
@@ -10,6 +12,10 @@ struct Z2GaugeFieldDPI{L <: AbstractLatticeWithPlaquattes, V} <: AbstractDiscret
     n_τ::Int
     lattice::L
     data::Array{V, 2}
+end
+
+function copy(σ::Z2GaugeFieldDPI{L, V}) where {L <: AbstractLatticeWithPlaquattes, V}
+    Z2GaugeFieldDPI{L, V}(σ.n_τ, σ.lattice, copy(σ.data))
 end
 
 field_lattice(σ::Z2GaugeFieldDPI) = σ.lattice
