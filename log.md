@@ -192,3 +192,7 @@ The horizontal strips found in the figure appear to come from the fact that diff
 
 TODO:
 - check whether a large n_sweep results in seemingly worse image quantities.
+
+# 2021.11.29
+
+Update notes.

@@ -20,7 +20,7 @@
 \usepackage{xcolor}
 \usepackage{listings}
 \usepackage{autobreak}
-\usepackage[ruled, vlined, linesnumbered, noend]{algorithm2e}
+\usepackage[ruled, vlined, linesnumbered]{algorithm2e}
 \usepackage[colorlinks]{hyperref} % , linkcolor=black, anchorcolor=black, citecolor=black, urlcolor=black
 \usepackage{prettyref}
 
@@ -59,10 +59,11 @@
 \tikzstyle dot=[anchor=base,fill,circle,inner sep=1pt]
 
 % Algorithm setting
-% Python-style code
-\SetKwIF{If}{ElseIf}{Else}{if}{:}{elif:}{else:}{}
-\SetKwFor{For}{for}{:}{}
-\SetKwFor{While}{while}{:}{}
+% Julia-style code
+\SetKwIF{If}{ElseIf}{Else}{if}{}{elseif}{else}{end}
+\SetKwFor{For}{for}{}{end}
+\SetKwFor{While}{while}{}{end}
+\SetKwProg{Function}{function}{}{end}
 \SetArgSty{textnormal}
 
 \newcommand*{\concept}[1]{{\textbf{#1}}}
@@ -103,7 +104,7 @@ In the whole article we use $\sigma$ and $s$ as shorthands of $\sigma^z$ and $s^
 The model investigated in this article is shown in \cite{moon2019deconfined}.
 The model Hamiltonian is 
 \begin{equation}
-    H = \underbrace{- g \sum_{\vb*{l} \in \Box_{\vb*{i}^*}} \sigma_{\vb*{i} \vb*{j}}^z - h \sum_{\pair{\vb*{i}, \vb*{j}}} \sigma^x_{\vb*{i} \vb*{j}}}_{H_Z} \underbrace{- J \sum_{\pair{\vb*{i}, \vb*{j}}} \sigma_{\vb*{i} \vb*{j}} s_{\vb*{i}} s_{\vb*{j}} + \sum_i h^x_i s^x_i}_{H_\text{Ising}} \underbrace{- t \sum_{\pair{\vb*{i}, \vb*{j}}} \sigma_{\vb*{i} \vb*{j}} c^\dagger_{\vb*{i}} c_{\vb*{j}}}_{H_\text{hopping}},
+    H = \underbrace{- g \sum_{\vb*{i}} \prod_{\vb*{l} \in \Box_{\vb*{i}^*}} \sigma_{\vb*{l}}^z - h \sum_{\pair{\vb*{i}, \vb*{j}}} \sigma^x_{\vb*{i} \vb*{j}}}_{H_Z} \underbrace{- J \sum_{\pair{\vb*{i}, \vb*{j}}} \sigma_{\vb*{i} \vb*{j}} s_{\vb*{i}} s_{\vb*{j}} + \sum_i h^x_i s^x_i}_{H_\text{Ising}} \underbrace{- t \sum_{\pair{\vb*{i}, \vb*{j}}} \sigma_{\vb*{i} \vb*{j}} c^\dagger_{\vb*{i}} c_{\vb*{j}}}_{H_\text{hopping}},
     \label{eq:proposed-model}
 \end{equation}
 where $\vb*{i}^*$ is a site in the dual lattice (i.e. a site placed at the center of a plaquette), 
@@ -166,7 +167,7 @@ where the parameter $h$ measures the quantum fluctuation.
 In the language of string-net condensation, $H_h$ is a string tension term.
 So when we say ``\Ztwo gauge theory'', usually we are referring to 
 \begin{equation}
-    H = - J \sum_{\vb*{i}} \prod_{\vb*{l} \in \Box_{\vb*{i}^*}} \sigma_{\vb*{l}} - h \sum_{\pair{\vb*{i}, \vb*{j}}} \sigma_{\vb*{i} \vb*{j}}^x.
+    H = - J \sum_{\vb*{i}} \prod_{\vb*{l} \in \Box_{\vb*{i}^*}} \sigma^z_{\vb*{l}} - h \sum_{\pair{\vb*{i}, \vb*{j}}} \sigma_{\vb*{i} \vb*{j}}^x.
     \label{eq:standard-z2-theory}
 \end{equation}
 
@@ -178,29 +179,29 @@ With the gauge choice
     \sigma_{\vb*{i}, \vb*{i}+\vu*{x}} = 1,
     \label{eq:gauge-choice-x}
 \end{equation}
-we have
+a \Ztwo flux is 
 \begin{equation}
-    F_{i^*} = \sigma_{i, i+\hat{y}} \sigma_{i+\hat{x}, i + \hat{x} + \hat{y}},
+    F_{\vb*{i}^*} = \sigma_{\vb*{i}, \vb*{i}+\vu*{y}} \sigma_{\vb*{i}+\vu*{x}, \vb*{i} + \vu*{x} + \vu*{y}},
 \end{equation}
-which, by renaming $\sigma_{i, i+\hat{y}}$ into $S_i$, reads 
+which, by renaming $\sigma_{\vb*{i}, \vb*{i}+\vu*{y}}$ into $S_{\vb*{i}}$, reads 
 \begin{equation}
-    F_{i^*} = S_i S_{i+\hat{x}}.
+    F_{\vb*{i}^*} = S_{\vb*{i}} S_{\vb*{i}+\hat{x}}.
 \end{equation}
 The hopping constant $\sigma_{\vb*{i} \vb*{j}}$, respectively, is
 \begin{equation}
     \sigma_{\vb*{i} \vb*{j}} = \left\{
     \begin{aligned}
-        1, &\quad j = i + \hat{x}, \\
-        S_i, &\quad j = i + \hat{y},
+        1, &\quad \vb*{j} = \vb*{i} + \vu*{x}, \\
+        S_{\vb*{i}}, &\quad \vb*{j} = \vb*{i} + \vu*{y},
     \end{aligned}
 \right., \quad \sigma_{\vb*{j} \vb*{i}} = \sigma_{\vb*{i} \vb*{j}}.
 \end{equation}
 
 This, actually, means that the \Ztwo gauge field may also be transformed into a dual transverse field Ising field.
 For example consider Wegner model.
-With the definition of $S_i$s it is rephrased into
+With the definition of the equivalent Ising spins $S_{\vb*{i}}$ the Wegner model is rephrased into
 \begin{equation}
-    H_\text{W} = -g \sum_i S_i S_{i+\hat{x}},
+    H_\text{W} = - J \sum_{\vb*{i}} \underbrace{\prod_{\vb*{l} \in \Box_{\vb*{i}^*}} \sigma_{\vb*{l}}}_{F_{\vb*{i}^*}} = -J \sum_{\vb*{i}} S_{\vb*{i}} S_{\vb*{i}+\vu*{x}},
 \end{equation}
 so the model is actually a bundle of 1D Ising spin chain.
 
@@ -212,13 +213,29 @@ so the model is actually a bundle of 1D Ising spin chain.
 
 \subsubsection{Mapping a \Ztwo gauge theory into a 2D \tfim{}}
 
+Note that the gauge fixing \eqref{eq:gauge-choice-x} fails with a non-zero $h$.
+Therefore, while it is tempting to write down 
+\begin{equation}
+    H = - J \sum_{\vb*{i}} S_{\vb*{i}}^z S^z_{\vb*{i} + \vu*{x}} - h \sum_{\vb*{i}} {S}^z_{\vb*{i}}
+\end{equation}
+as an equivalent Hamiltonian of \eqref{eq:standard-z2-theory}, we cannot.
+The transverse field term \emph{does not commute} with $\sigma_{\vb*{i}, \vb*{i} + \vu*{x}}$ and therefore 
+gauge fixing \eqref{eq:gauge-choice-x} is not a consistent choice.
+
+We can still recast \eqref{eq:standard-z2-theory} into a \tfim{}, but generally speaking we can only recast it into a 2D one.
+
 \begin{equation}
     H = - h \sum_{\pair{\vb*{I}, \vb*{J}}} \tau^z_{\vb*{I}} \tau^z_{\vb*{J}} - J \sum_{\vb*{I}} \tau^x_{\vb*{I}}.
     \label{eq:z2-dual-theory}
 \end{equation}
-
 \eqref{eq:z2-dual-theory} is often called the \concept{dual \tfim{}} of \Ztwo gauge theory \eqref{eq:standard-z2-theory}.
 The model \eqref{eq:standard-z2-theory}, therefore, is often called the \concept{Ising gauge theory}.
+
+Note that the \Ztwo fluxes cannot be locally calculated with $\tau^x$ and $\tau^z$. 
+Therefore, although with \eqref{eq:z2-dual-theory} we manage to eliminate the gauge redundancy in \eqref{eq:standard-z2-theory},
+we \emph{should not} do so when the \Ztwo degrees of freedom are coupled to other degrees of freedom.
+For example, in \eqref{eq:proposed-model}, the deconfined fermions are coupled to $\sigma^z$ and 
+we do not have a local expression of $\sigma^z$ in terms of degrees of freedom in \eqref{eq:z2-dual-theory}.
 
 \subsubsection{Absence of a finite temperature deconfined phase}\label{sec:absence-of-z2-deconfined-phase}
 
@@ -236,9 +253,9 @@ The fact that Wegner model is dual to a bundle of 1D Ising chain and therefore l
     \label{fig:phase-diagram-expected-pure-z2}
 \end{figure}
 
-Here the terminology may cause confusion: we do not actually know if the "finite temperature deconfined" phase shares behavior with the standard zero temperature deconfined phase in Wegner model, and the "confined" phase in the high temperature condition is not caused by a strong transverse field which coerces all $\sigma$ degrees of freedom into $\rightarrow$ or $\leftarrow$, but rather, by thermal fluctuation that erases all information of \Ztwo excitations.
-With the criteria of Wilson loops we know the "deconfined" phase obeys the perimeter law, agreeing with the ordinary deconfined phase in Wegner model, but whether the Wilson loop operator is a good detector in non-local models is still under question, because in local models, existence of long range correlation indicates exotic phenomena, while in non-local models long range correlation may be a trivial consequence of the non-locality.
-All these questions remain open, and in this project we simply use the terms "confined" and "deconfined" as a shorthand of the two phases in a \Ztwo gauge field theory with a dual theory of Dyson-Ising spin chains, without inquiring into their similarity and discrepancy with local \Ztwo theories such as Wegner model.
+Here the terminology may cause confusion: we do not actually know if the ``finite temperature deconfined'' phase shares behavior with the standard zero temperature deconfined phase in Wegner model, and the ``confined'' phase in the high temperature condition is not caused by a strong transverse field which coerces all $\sigma$ degrees of freedom into $\rightarrow$ or $\leftarrow$, but rather, by thermal fluctuation that erases all information of \Ztwo excitations.
+With the criteria of Wilson loops we know the ``deconfined'' phase obeys the perimeter law, agreeing with the ordinary deconfined phase in Wegner model, but whether the Wilson loop operator is a good detector in non-local models is still under question, because in local models, existence of long range correlation indicates exotic phenomena, while in non-local models long range correlation may be a trivial consequence of the non-locality.
+All these questions remain open, and in this project we simply use the terms ``confined'' and ``deconfined'' as a shorthand of the two phases in a \Ztwo gauge field theory with a dual theory of Dyson-Ising spin chains, without inquiring into their similarity and discrepancy with local \Ztwo theories such as Wegner model.
 
 \subsubsection{(Trivial) deconfined phase in models with long-range interaction}
 
@@ -296,6 +313,16 @@ One possibility is that the fermions are glued together, forming something like 
 Nonetheless, note that orthogonal metals are generated in a strongly correlated \emph{electron} systems, so it is highly likely that \emph{one fermion and one Ising spin} are glued together, restoring the electrons.
 In this case, the confined phase is just an ordinary metal, with gapless fermions (electrons).
 At high temperature \Ztwo excitations are confined (in the sense defined in \prettyref{sec:absence-of-z2-deconfined-phase}), so \eqref{eq:proposed-model} is just an ordinary metal.
+
+\subsubsection{Deconfined phase and effective interaction between \Ztwo fluxes}
+
+\begin{figure}
+    \centering
+    \input{lattice/string-fluxes.tex}
+    \caption{Two \Ztwo fluxes and the string connecting them. 
+    This configuration may change the total energy of the gas of deconfined fermions, 
+    therefore inducing an effective interaction channel between \Ztwo fluxes.}
+\end{figure}
 
 \section{Principles of Monte Carlo simulation for degrees of freedom in \eqref{eq:proposed-model}}
 
@@ -540,8 +567,6 @@ by introducing a transverse field (or string tension term), we have already done
 
 \subsection{Fermion coupling}
 
-\subsubsection{General ideas of DQMC}
-
 \concept{Determinant Quantum Monte Carlo (DQMC)} is a discrete path integral for fermions, 
 where an (bosonic) auxiliary field is introduced by Hubbard-Stratonovich transformation and Green functions of the fermions can be recast in terms of the auxiliary field, so we rephrase a fermionic problem into a bosonic one.
 
@@ -571,33 +596,47 @@ and in the last line values of $\sigma(\tau)$ replaces the $\sigma^z$ operators 
 We can see that the \Ztwo part and the \tfim{} part now has nothing to do with the fermions - as is the case in ordinary continuous path integrals - and can be simulated either natively by considering the path integral as a classical statistical model to be calculated with the Metropolis algorithm or maybe some cluster update algorithms, or by more sophisticated algorithms like the SSE.
 As for the factor containing the product of $\ee^{\Delta\tau t \bm{\sigma}(\tau)}$, i.e. 
 \begin{equation}
-    W_\text{fermion}(\sigma) = \det \left(1 + \prod_{\tau = 1}^{m\Delta \tau} \vb{B}(\tau) \right), \quad \vb{B}(\tau) =  \ee^{\Delta \tau t \bm{\sigma}(\tau)},
+    W_\text{fermion}(\sigma) = \det \left(1 + \prod_{\tau = 1}^{m\Delta \tau} \vb{B}_\tau \right), \quad \vb{B}_\tau =  \ee^{\Delta \tau t \bm{\sigma}(\tau)},
 \end{equation}
 we find their effective calculation is very hard and should better be updated using DQMC, and here the \Ztwo gauge theory $\sigma_{\vb*{i} \vb*{j}}(\tau)$ plays the role of the auxiliary field.
-The acceptance rate can be calculated as 
+We define 
+\begin{equation}
+    \begin{gathered}
+        \mathbf{B}_{m} \cdots \mathbf{B}_{\tau+1} \eqqcolon \mathbf{B}(\beta, \tau), \\
+        \mathbf{B}_{\tau} \cdots \mathbf{B}_{1} \eqqcolon \mathbf{B}(\tau, 0),
+    \end{gathered}
+\end{equation}
+and the acceptance rate can be calculated as 
+\begin{equation}
+    \begin{aligned}
+        & \frac{\operatorname{det}(1+\mathbf{B}(\beta, \tau)(1+\vb{\Delta})(\mathbf{B}(\tau, 0))}{\operatorname{det}(1+\mathbf{B}(\beta, \tau) \mathbf{B}(\tau, 0))} \\
+        =& \operatorname{det}\left(1+\vb{\Delta}\left(1-(1+\mathbf{B}(\tau, 0) \mathbf{B}(\beta, \tau))^{-1}\right)\right) \\
+        =& \operatorname{det}(1+\vb{\Delta}(1-\mathbf{G}(\tau, \tau))),
+    \end{aligned}
+\end{equation}
+where the Green function is 
+\begin{equation}
+    \mathbf{G}(\tau, \tau) = (1+\mathbf{B}(\tau, 0) \mathbf{B}(\beta, \tau))^{-1}.
+\end{equation}
 
-Trotter errors are largely ignored in this project. Nor will we perform a systematic analysis to see whether the Trotter errors are bounded.
-This is actually reasonable because terms and parameters in \eqref{eq:proposed-model} are \emph{not} based on any \emph{ab initio} results, and the universality of \eqref{eq:proposed-model} is more important than its quantitative behaviors.
-Usually, Trotter errors do not change the universality class, so we will be willing to forget about them.
-When we do have to simulate the behaviors of \eqref{eq:proposed-model} quantitative, we can always do the computation with different $\Delta \tau$ choices and plot the observables to see the $\Delta \tau \to 0$ limit.
-
-Some Monte Carlo flavors other than out discrete path integral approach - for example, the SSE - do not have the problem of Trotter errors, but there are other errors that are hard to keep track of.
-The maximum order of terms in the SSE, for example, largely determine the precision, and within the framework of the SSE we have to do observables v.s. expansion order plotting and extrapolation.
-
+Now we derive explicitly $\vb{\Delta}$ matrices needed for updating. We have
 \[
-    \exp(\Delta\tau t \pmqty{
+    \begin{aligned}
+        &\quad \exp(\Delta\tau t \pmqty{
         \ddots & \vdots & & \vdots & \iddots \\
         \cdots & 0 & \cdots & - \sigma^z_{\vb*{i} \vb*{j}}(\tau) & \cdots \\ 
          & \vdots & & \vdots & \\
         \cdots & - \sigma^z_{\vb*{i} \vb*{j}}(\tau) & \cdots & 0 & \cdots \\
         \iddots & \vdots & & \vdots & \ddots
-    })= (\vb{I} + \vb{\Delta})  \exp(\Delta\tau t \pmqty{
+        }) \\
+        &= (\vb{I} + \vb{\Delta})  \exp(\Delta\tau t \pmqty{
         \ddots & \vdots & & \vdots & \iddots \\
         \cdots & 0 & \cdots & \sigma^z_{\vb*{i} \vb*{j}}(\tau) & \cdots \\ 
          & \vdots & & \vdots & \\
         \cdots & \sigma^z_{\vb*{i} \vb*{j}}(\tau) & \cdots & 0 & \cdots \\
         \iddots & \vdots & & \vdots & \ddots
-    }) ,
+        }) ,
+    \end{aligned}
 \]
 and therefore we have 
 \[
@@ -610,12 +649,63 @@ Note that
 \]
 we obtain the projection of $\vb{\Delta}$ on the subspace of $\vb*{i}$ and $\vb*{j}$, which is 
 \begin{equation}
-    \Delta = \pmqty{ \cosh(2 \Delta \tau t \sigma_{\vb*{i} \vb*{j}}^z(\tau))-1 & - \sinh(2 \Delta \tau t \sigma_{\vb*{i} \vb*{j}}^z(\tau)) \\
+    \vb{\Delta} = \pmqty{ \cosh(2 \Delta \tau t \sigma_{\vb*{i} \vb*{j}}^z(\tau))-1 & - \sinh(2 \Delta \tau t \sigma_{\vb*{i} \vb*{j}}^z(\tau)) \\
     - \sinh(2 \Delta \tau t \sigma_{\vb*{i} \vb*{j}}^z(\tau)) & \cosh(2 \Delta \tau t \sigma_{\vb*{i} \vb*{j}}^z(\tau)) - 1}.
 \end{equation}
 All other elements of $\vb{\Delta}$ are zero.
 
-\section{Some details of the program}
+\subsubsection{An overview of subroutines} 
+
+Now we divide the calculation above into subroutines. They are:
+\begin{itemize}
+    \item Calculating $\vb{B}_\tau$ at a time step from the auxiliary field configuration, 
+    \item Calculating $\vb{B}(\tau, 0)$ and $\vb{B}(\beta, \tau)$ from $\vb{B}_\tau$,
+    \item Calculating equal time Green functions from $\vb{B}(\beta, \tau)$ and $\vb{B}(\tau, 0)$,
+    \item Calculating accept rate from Green functions, and
+    \item Update Green function, i.e. calculating Green function after updating from the Green function before 
+    updating.
+\end{itemize} 
+Note that among these procedures, the Green function update routine has accumulated numerical error, 
+and therefore from time to time, we have to recalculate Green functions directly from $\vb{B}$ matrices. 
+
+\begin{algorithm}
+
+    \DontPrintSemicolon
+    \SetAlgoLined
+
+    \SetKwFunction{dqmcsweep}{dqmc\_sweep}
+    \Function(\tcc*[h]{Perform a complete sweep, from $\tau=1$ to $\tau=\beta$ and then back}){\dqmcsweep{i}}{
+        \eIf{Condition}{Then}{else}
+
+    \For(\tcc*[h]{for condition comment}){for condition}{
+        Do sth \tcc*[r]{asdf}
+    }
+
+    \While{the condition}{
+        do something \;
+        $i = i + 1$ \;
+        
+    }
+    
+    \Return{return value}\;
+    \Begin{Mad}
+    }
+
+    \caption{Procedures used in DQMC}
+    \label{alg:procedures}
+\end{algorithm}
+
+\subsubsection{Error analysis}
+
+Trotter errors are largely ignored in this project. Nor will we perform a systematic analysis to see whether the Trotter errors are bounded.
+This is actually reasonable because terms and parameters in \eqref{eq:proposed-model} are \emph{not} based on any \emph{ab initio} results, and the universality of \eqref{eq:proposed-model} is more important than its quantitative behaviors.
+Usually, Trotter errors do not change the universality class, so we will be willing to forget about them.
+When we do have to simulate the behaviors of \eqref{eq:proposed-model} quantitative, we can always do the computation with different $\Delta \tau$ choices and plot the observables to see the $\Delta \tau \to 0$ limit.
+
+Some Monte Carlo flavors other than out discrete path integral approach - for example, the SSE - do not have the problem of Trotter errors, but there are other errors that are hard to keep track of.
+The maximum order of terms in the SSE, for example, largely determine the precision, and within the framework of the SSE we have to do observables v.s. expansion order plotting and extrapolation.
+
+\section{Details of the program}
 
 Among different numerical approaches in computational condensed matter physics, 
 quantum Monte Carlo programs may be the closest to the standard procedural programming paradigm:
@@ -631,6 +721,11 @@ Another reason is to make benchmarking easier.
 We know unfolding concise codes involving linear algebra, array comprehension, etc. into lines can save a large amount of memory allocation time,
 but the cole after the expansion is hard to read and analyze.
 In this case, generic definitions can be used as a correct-yet-slow benchmark for the expanded version, which agrees with Julia's design philosophy.
+
+\subsection{List of abbreviations}
+
+\paragraph{DPI} discrete path integral
+\paragraph{DQMC} determinant quantum Monte Carlo
 
 \subsection{The lattice}
 
@@ -678,7 +773,9 @@ so we have
 There is still Trotter error, but it only comes from the first step, and as long as $\Delta \tau$ is small enough to make the first equation a reasonable approximation, we can move multiplicative factors in the second equation without introducing additional error.
 The check-board decomposition, therefore, is a useful method to reduce the Trotter error without having to accept a too small $\Delta \tau$.
 
-\subsection{Storage of the \Ztwo gauge field}
+\subsection{Storage of fields}
+
+\subsubsection{The \Ztwo gauge field}
 
 \begin{figure}
     \centering
@@ -701,10 +798,13 @@ Note that the definition of A sublattice and B sublattice in \prettyref{fig:z2-d
     \label{fig:z2-dividing-real}
 \end{figure}
 
+\subsection{Structures and procedures in the implementation}
+
+
 
 \section{Simulation of \Ztwo gauge theory with different approaches}
 
-\subsection{Monte Carlo simulation of the pure \Ztwo gauge theory with gauge \eqref{eq:gauge-choice-x}}
+\subsection{Monte Carlo simulation of the pure \Ztwo gauge theory with gauge fixing \eqref{eq:gauge-choice-x}}
 
 It should be kept in mind that the gauge \eqref{eq:gauge-choice-x} is \emph{not} a good gauge choice when a transverse field is introduced.
 This section, therefore, is mainly about how wrong it is, and whether predictions that are \emph{valid} under \eqref{eq:gauge-choice-x} - most importantly, no thermal phase transition when $h=0$ - is observed in the numerical simulation.

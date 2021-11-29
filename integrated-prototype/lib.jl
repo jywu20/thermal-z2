@@ -2,12 +2,12 @@ using Statistics
 using LinearAlgebra
 
 include("utils.jl")
-include("abstract-lattice.jl")
-include("square-lattice.jl")
+include("lattice/abstract-lattice.jl")
+include("lattice/square-lattice.jl")
 include("abstract-model.jl")
 
 include("flags.jl")
 
-include("pure-z2.jl")
-include("tfim.jl")
-include("z2-fermion.jl")
+include("gauge/z2/pure-z2.jl")
+include("spin/tfim.jl")
+include("dqmc/z2/z2-fermion.jl")
