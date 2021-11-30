@@ -1,4 +1,6 @@
-function B_at_bond(model::Z2SpinlessFermionDQMC{F, M}, σ::Z2GaugeFieldDPI, b, τ) where {
+# Creating Hamiltonian "fragments" on each bond, as a possible way to quickly calculate B matrices.
+
+function B_at_bond(model::Z2SpinlessFermionSimpleDQMC{F}, σ::Z2GaugeFieldDPI, b, τ) where {
     F <: AbstractFloat, M <: AbstractMatrix
 }
     lattice = σ.lattice
@@ -12,9 +14,9 @@ function B_at_bond(model::Z2SpinlessFermionDQMC{F, M}, σ::Z2GaugeFieldDPI, b, �
     M(exp(T))
 end
 
-B_at_bond(model::Z2SpinlessFermionDQMC, config::Z2SpinlessFermionAuxField, b, τ) = B_at_bond(model, config.σ, b, τ)
+B_at_bond(model::Z2SpinlessFermionSimpleDQMC, config::Z2SpinlessFermionSimpleAuxField, b, τ) = B_at_bond(model, config.σ, b, τ)
 
-function B_prod_bonds(model::Z2SpinlessFermionDQMC{F, M}, σ::Z2GaugeFieldDPI, τ) where {
+function B_prod_bonds(model::Z2SpinlessFermionSimpleDQMC{F}, σ::Z2GaugeFieldDPI, τ) where {
     F <: AbstractFloat, M <: AbstractMatrix
 }
     lattice = σ.lattice

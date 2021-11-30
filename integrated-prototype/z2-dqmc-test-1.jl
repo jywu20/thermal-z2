@@ -17,7 +17,7 @@ lattice = SquareLattice2DPeriodic(n_side)
 σ[14, 1] = -1
 σ[2, 2] = -1
 
-model = Z2SpinlessFermionDQMC(Float64, Matrix{Float64}, σ, 1.0, 0.5, 4.0)
+model = Z2SpinlessFermionSimpleDQMC(Float64, σ, 1.0, 0.5, 4.0)
 
 τ = 1
 
@@ -39,7 +39,7 @@ error_2_list = []
 
 for Δτ in Δτ_list
     τ = 1
-    model = Z2SpinlessFermionDQMC(Float64, Matrix{Float64}, σ, 1.0, Δτ, 4.0)
+    model = Z2SpinlessFermionSimpleDQMC(Float64, σ, 1.0, Δτ, 4.0)
 
     n_side = 4
     n_site = n_side^2
@@ -67,7 +67,7 @@ ylabel!(p, "relative error")
 error_list = []
 
 for Δτ in Δτ_list
-    model = Z2SpinlessFermionDQMC(Float64, Matrix{Float64}, σ, 1.0, Δτ, 4.0)
+    model = Z2SpinlessFermionSimpleDQMC(Float64, σ, 1.0, Δτ, 4.0)
 
     n_side = 4
     n_site = n_side^2
@@ -91,7 +91,7 @@ plot(Δτ_list, error_list, legend = false, xlabel=L"\Delta\tau")
 # Test the accumulation of Trotter error.
 
 Δτ = 0.001
-model = Z2SpinlessFermionDQMC(Float64, Matrix{Float64}, σ, 1.0, Δτ, 4.0)
+model = Z2SpinlessFermionSimpleDQMC(Float64, σ, 1.0, Δτ, 4.0)
 
 n_side = 4
 n_site = n_side^2

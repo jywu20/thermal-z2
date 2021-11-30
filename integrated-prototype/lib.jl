@@ -8,6 +8,6 @@ include("abstract-model.jl")
 
 include("flags.jl")
 
-include("gauge/z2/pure-z2.jl")
-include("spin/tfim.jl")
+include("gauge-dpi/z2/pure-z2.jl")
+include("spin-dpi/tfim.jl")
 include("dqmc/z2/z2-fermion.jl")

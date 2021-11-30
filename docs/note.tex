@@ -617,6 +617,7 @@ and the acceptance rate can be calculated as
 where the Green function is 
 \begin{equation}
     \mathbf{G}(\tau, \tau) = (1+\mathbf{B}(\tau, 0) \mathbf{B}(\beta, \tau))^{-1}.
+    \label{eq:green-function-def}
 \end{equation}
 
 Now we derive explicitly $\vb{\Delta}$ matrices needed for updating. We have
@@ -667,6 +668,35 @@ Now we divide the calculation above into subroutines. They are:
 \end{itemize} 
 Note that among these procedures, the Green function update routine has accumulated numerical error, 
 and therefore from time to time, we have to recalculate Green functions directly from $\vb{B}$ matrices. 
+This is often called ``numerical stabilization'', because with this re-calculation step the numerical error 
+in matrix production is controlled. Note that \eqref{eq:green-function-def} involves inversion of a matrix 
+with both large and small energy scales, we need some numerical trick to calculate it accurately.
+We have 
+\begin{equation}
+    \begin{aligned}
+        &\quad \mathbf{G}(\tau, \tau) \\
+        &=[1+\mathbf{B}(\tau, 0) \mathbf{B}(\beta, \tau)]^{-1} \\
+        &=\left[1+\mathbf{U}_{R} \mathbf{D}_{R} \mathbf{V}_{R} \mathbf{V}_{L} \mathbf{D}_{L} \mathbf{U}_{L}\right]^{-1} \\
+        &=\mathbf{U}_{L}^{-1}\left[\left(\mathbf{U}_{L} \mathbf{U}_{R}\right)^{-1}+\mathbf{D}_{R}\left(\mathbf{V}_{R} \mathbf{V}_{L}\right) \mathbf{D}_{L}\right]^{-1} \mathbf{U}_{R}^{-1} \\
+        &=\mathbf{U}_{L}^{-1}\left[\left(\mathbf{U}_{L} \mathbf{U}_{R}\right)^{-1}+\mathbf{D}_{R}^{\max } \mathbf{D}_{R}^{\min }\left(\mathbf{V}_{R} \mathbf{V}_{L}\right) \mathbf{D}_{L}^{\min } \mathbf{D}_{L}^{\max }\right]^{-1} \mathbf{U}_{R}^{-1} \\
+        &=\mathbf{U}_{L}^{-1}\left(\mathbf{D}_{L}^{\max }\right)^{-1}\left[\left(\mathbf{D}_{R}^{\max }\right)^{-1}\left(\mathbf{U}_{L} \mathbf{U}_{R}\right)^{-1}\left(\mathbf{D}_{L}^{\max }\right)^{-1}+\mathbf{D}_{R}^{\min } \mathbf{V}_{R} \mathbf{V}_{L} \mathbf{D}_{L}^{\min }\right]^{-1}\left(\mathbf{D}_{R}^{\max }\right)^{-1} \mathbf{U}_{R}^{-1},
+        \end{aligned}
+        \label{eq:green-udv}
+\end{equation}
+where $\vb{D}$ is obtained via SVD decomposition and is a diagonal matrix, and therefore, suppose
+$\vb{D}^\text{max}$ is obtained by setting all elements in $\vb{D}$ that are smaller than $\lambda$
+into unity, and $\vb{D}^\text{min}$ is obtained by setting all elements in $\vb{D}$ that are larger 
+than $\lambda$ into unity, where $\lambda \simeq 1$, then we have 
+\[
+    \vb{D} = \vb{D}^\text{max} \vb{D}^\text{min} = \vb{D}^\text{min} \vb{D}^\text{max},
+\]
+and we see the last line of \eqref{eq:green-udv} does not involve inversion of a matrix with small eigenvalues,
+so there is no large numerical error in \eqref{eq:green-udv}.
+
+The fact that we are going to use \eqref{eq:green-udv} to calculate Green functions means we have to decompose
+$\vb{B}$ matrices into $U, D, V$ before calculating Green functions. The decomposition is implemented using 
+SVD decomposition which is provided in every linear algebra library. The decomposition procedure is often called 
+as 
 
 \begin{algorithm}
 
