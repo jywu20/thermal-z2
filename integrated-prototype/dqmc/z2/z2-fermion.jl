@@ -22,11 +22,12 @@ type parameters:
 - `S`: a three-dimensional array type used to store auxiliary matrices, for example `Array{Float64, 3}`. 
 The indexing convention: [site1, site2, imaginary time]
 """
-struct Z2SpinlessFermionSimpleAuxField{
+mutable struct Z2SpinlessFermionSimpleAuxField{
     L <: AbstractLatticeWithPlaquattes, V, F <: AbstractFloat
 } <: AbstractFermionAuxField{L, Z2GaugeFieldDPI{L, V}, F}
     σ::Z2GaugeFieldDPI{L, V}
     G::Array{F, 3}
+    propagate_count::Int
 end
 
 struct Z2SpinlessFermionSimpleDQMC{F <: AbstractFloat}
@@ -40,35 +41,15 @@ function Z2SpinlessFermionSimpleDQMC(::Type{F}, σ::Z2GaugeFieldDPI, n_wrap::Int
     F <: AbstractFloat
 }
     n_τ = time_step_number(σ)
-    if n_τ % n_wrap != 0
-        error("n_wrap must be a divisor of n_τ.")
-    end
 
     n_τ = time_step_number(σ)
     β = Δτ * n_τ
     Z2SpinlessFermionSimpleDQMC{F}(t, Δτ, β, n_wrap)
 end
 
-function Δ_mat(model::Z2SpinlessFermionSimpleDQMC{F}, σ::Z2GaugeFieldDPI{L, V}, b, τ) where {
-    L <: AbstractLattice, V, F <: AbstractFloat
-}
-    t = model.t
-    lattice = σ.lattice
-    n_site = site_number(lattice)
-    i, j = bond_to_sites(lattice, b)
-    Δ = zeros(F, n_site, n_site)
-    if σ[b, τ] == one(V) 
-        Δ[i, i] = Δ[j, j] = cosh(2 * Δτ * t) - 1
-        Δ[i, j] = Δ[j, i] = - sinh(2 * Δτ * t)
-    else
-        Δ[i, i] = Δ[j, j] = cosh(- 2 * Δτ * t) - 1
-        Δ[i, j] = Δ[j, i] = - sinh(- 2 * Δτ * t)
-    end
-    Δ
-end
-
 include("defs.jl")
 include("b-mat.jl")
 include("green.jl")
 include("bond.jl")
+include("update.jl")
 include("init.jl")

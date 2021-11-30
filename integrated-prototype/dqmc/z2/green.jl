@@ -41,5 +41,5 @@ function G_τ_τ(model::Z2SpinlessFermionSimpleDQMC, aux::Z2SpinlessFermionSimpl
 end
 
 function G_τ_τ!(model::Z2SpinlessFermionSimpleDQMC, aux::Z2SpinlessFermionSimpleAuxField, τ)
-    aux.G[:, :, τ] =G_τ_τ(model, aux, τ)
+    aux.G[:, :, τ] = G_τ_τ(model, aux, τ)
 end

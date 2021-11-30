@@ -196,3 +196,17 @@ TODO:
 # 2021.11.29
 
 Update notes.
+
+# 2021.11.30
+
+Completed parts involving $\bold{B}$ matrices. `G_τ_τ_def` seems to disagree with `G_τ_τ`.
+Tests are being done in `integrated-prototype\z2-dqmc-test-2.jl`.
+
+After some test the reason is found to be that in a downward `for` loop I forget to add a `-1`
+step in the range.
+
+TODO: It can be found that the accept rate is very close to 1 when $t \sim 1$, though the accept rates 
+calculated with $\bold{B}$ matrices and Green functions agree with each other. Is it a problem?
+
+With the current implementation the relative error of $\Delta$-matrices updating is $\sim 0.001$.
+Not sure whether this is correct. 
