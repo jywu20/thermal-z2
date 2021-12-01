@@ -9,6 +9,6 @@ include("abstract-model.jl")
 include("flags.jl")
 
 include("gauge-dpi/z2/pure-z2.jl")
-include("gauge-dpi/z2/z2-ising.jl")
 include("spin-dpi/tfim.jl")
 include("dqmc/z2/z2-fermion.jl")
+include("gauge-dpi/z2/z2-ising.jl")
