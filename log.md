@@ -215,4 +215,4 @@ Not sure whether this is correct.
 
 It seems there is no evidence for bugs in the DQMC part.
 
-Developing the main program.
+Developing the main program in `integrated-prototype\main.jl`.
