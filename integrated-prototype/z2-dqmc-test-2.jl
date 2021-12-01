@@ -51,7 +51,7 @@ relative_err(B_τ_0_def(model, σ, τ), U * D * V)
 b = 10
 τ = 2 
 
-relative_err(weight_ratio(model, aux, b, τ), accept_rate_def(model, aux.σ, b, τ))
+relative_err(weight_ratio(model, aux, b, τ), weight_ratio_def(model, aux.σ, b, τ))
 
 ##
 
@@ -68,7 +68,7 @@ b = 12
 τ = 6
 update!(model, aux, b, τ)
 (relative_err(G_τ_τ_def(model, aux.σ, τ), aux.G[:, :, τ]), 
-relative_err(weight_ratio(model, aux, b, τ), accept_rate_def(model, aux.σ, b, τ)))
+relative_err(weight_ratio(model, aux, b, τ), weight_ratio_def(model, aux.σ, b, τ)))
 
 ##
 σ′ = copy(σ)
@@ -88,7 +88,7 @@ relative_err(G_old, G_new)
 
 ##
 
-τ = 10 
+τ = 9
 G_old = aux.G[:, :, τ - 1]
 propagate_backward!(model, aux, τ)
 G_new = aux.G[:, :, τ - 1]

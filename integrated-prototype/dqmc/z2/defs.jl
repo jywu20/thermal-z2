@@ -67,7 +67,7 @@ function T_def(model::Z2SpinlessFermionSimpleDQMC, σ::Z2GaugeFieldDPI, τ)
     - t * T
 end
 
-function accept_rate_def(model::Z2SpinlessFermionSimpleDQMC, σ::Z2GaugeFieldDPI, b, τ)
+function weight_ratio_def(model::Z2SpinlessFermionSimpleDQMC, σ::Z2GaugeFieldDPI, b, τ)
     σ′ = copy(σ)    
     σ′[b, τ] *= -1
     z = det(I + B_β_τ_def(model, σ, 0))

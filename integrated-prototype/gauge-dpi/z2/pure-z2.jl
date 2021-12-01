@@ -95,7 +95,7 @@ function IsingGaugeTheoryDPIMetropolisMC(::Type{F}, σ::Z2GaugeFieldDPI, J::F, h
     IsingGaugeTheoryDPIMetropolisMC{F}(J, h, Δτ, β, J_xy, J_τ)
 end
 
-function accept_rate(model::IsingGaugeTheoryDPIMetropolisMC, σ::Z2GaugeFieldDPI, b::Int, τ)
+function weight_ratio(model::IsingGaugeTheoryDPIMetropolisMC, σ::Z2GaugeFieldDPI, b::Int, τ)
     J_xy = model.J_xy
     J_τ = model.J_τ
     exp(J_xy * Δ_plaquatte_term(σ, b, τ) + J_τ * Δ_temporal_correlation_term(σ, b, τ))
@@ -109,7 +109,7 @@ function sweep!(model::IsingGaugeTheoryDPIMetropolisMC, σ::Z2GaugeFieldDPI, n_s
     for _ in 1 : n_sweep
         for τ in time_steps(σ)
             for b in lattice_bonds
-                if rand() < accept_rate(model, σ, b, τ)
+                if rand() < weight_ratio(model, σ, b, τ)
                     σ[b, τ] *= -1 
                 end
             end

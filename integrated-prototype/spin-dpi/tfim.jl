@@ -58,10 +58,17 @@ function TransverseFieldIsingModelDPIMetropolisMC(::Type{F}, s::IsingFieldDPI, J
     TransverseFieldIsingModelDPIMetropolisMC{F}(J, h, Δτ, β, J_xy, J_τ)
 end
 
-function accept_rate(model::TransverseFieldIsingModelDPIMetropolisMC, s::IsingFieldDPI, i, τ)
+function weight_ratio(model::TransverseFieldIsingModelDPIMetropolisMC, s::IsingFieldDPI, i, τ)
     J_xy = model.J_xy
     J_τ = model.J_τ
     exp(J_xy * Δ_spacial_correlation_term(s, i, τ) + J_τ * Δ_temporal_correlation_term(s, i, τ))
+end
+
+"""
+The first parameter is only relevant for its type.
+"""
+function update!(_::TransverseFieldIsingModelDPIMetropolisMC, s::IsingFieldDPI, i, τ)
+    s[i, τ] *= -1
 end
 
 function sweep!(model::TransverseFieldIsingModelDPIMetropolisMC, s::IsingFieldDPI, n_sweep::Integer; 
@@ -72,7 +79,7 @@ function sweep!(model::TransverseFieldIsingModelDPIMetropolisMC, s::IsingFieldDP
     for _ in 1 : n_sweep
         for τ in time_steps(s)
             for i in lattice_sites
-                if rand() < accept_rate(model, s, i, τ)
+                if rand() < weight_ratio(model, s, i, τ)
                     s[i, τ] *= -1 
                 end
             end

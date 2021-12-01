@@ -210,3 +210,9 @@ calculated with $\bold{B}$ matrices and Green functions agree with each other. I
 
 With the current implementation the relative error of $\Delta$-matrices updating is $\sim 0.001$.
 Not sure whether this is correct. 
+
+# 2021.12.1
+
+It seems there is no evidence for bugs in the DQMC part.
+
+Developing the main program.

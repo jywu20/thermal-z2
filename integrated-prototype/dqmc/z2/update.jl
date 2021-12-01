@@ -26,7 +26,7 @@ Propagate from τ to τ + 1
 """
 function propagate_forward!(model::Z2SpinlessFermionSimpleDQMC, aux::Z2SpinlessFermionSimpleAuxField, τ)
     if aux.propagate_count == model.n_wrap
-        G_τ_τ!(model, aux, τ)
+        G_τ_τ!(model, aux, τ + 1)
         aux.propagate_count = 0
         return
     end
@@ -40,7 +40,7 @@ Propagate from τ to τ - 1
 """
 function propagate_backward!(model::Z2SpinlessFermionSimpleDQMC, aux::Z2SpinlessFermionSimpleAuxField, τ)
     if aux.propagate_count == model.n_wrap
-        G_τ_τ!(model, aux, τ)
+        G_τ_τ!(model, aux, τ - 1)
         aux.propagate_count = 0
         return
     end
