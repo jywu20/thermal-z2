@@ -23,7 +23,7 @@ end
 #region Discrete path integral Monte Carlo for transverse field Ising model
 
 function magnetization(s::IsingFieldDPI, τ)
-    sum(s.data[:, τ]) / site_number(s.lattice)
+    abs(sum(s.data[:, τ])) / site_number(s.lattice)
 end
 
 function Δ_spacial_correlation_term(s::IsingFieldDPI, i, τ)
