@@ -216,3 +216,13 @@ Not sure whether this is correct.
 It seems there is no evidence for bugs in the DQMC part.
 
 Developing the main program in `integrated-prototype\main.jl`.
+
+# 2021.12.2
+
+Updated `integrated-prototype\2021-12-1\main.jl` for phase diagram scanning.
+
+TODO: tests to be done:
+- Consistent test: running under the same parameter setting for several times and checking whether the results 
+  agree with each other
+- Finding where the zero temperature effects are important
+- Finding critical points
